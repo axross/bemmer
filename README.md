@@ -39,7 +39,14 @@ export default React.createClass({
     );
   },
 });
+```
 
+#### in DOM :
+
+```html
+  <div class="counter">
+    <a class="counter__button--isOdd">3</a>
+  </div>
 ```
 
 ## API
