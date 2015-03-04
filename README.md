@@ -1,6 +1,10 @@
-# [WIP] bemmer.js
+[WIP] bemmer.js
+================================
 
-[![npm](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/bemmer)
+Class name generator for React.js with BEM.
+
+[![npm version](https://badge.fury.io/js/bemmer.svg)](http://badge.fury.io/js/bemmer)
+![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)
 
 ## API
 

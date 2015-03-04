@@ -1,7 +1,7 @@
 {
   "name": "bemmer",
-  "version": "0.0.2",
-  "description": "Generate className for React.js using BEM",
+  "version": "0.0.3",
+  "description": "Class name generator for React.js with BEM.",
   "main": "bemmer.js",
   "scripts": {
     "build": "babel src/bemmer.es6 -o bemmer.js",
