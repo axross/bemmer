@@ -1,0 +1,31 @@
+{
+  "name": "bemmer",
+  "version": "0.0.1",
+  "description": "Generate className for React.js using BEM",
+  "main": "bemmer.js",
+  "scripts": {
+    "build": "babel src/bemmer.es6 -o bemmer.js",
+    "test": "mocha         --colors --growl --compilers jsx:babel/register --ui bdd --reporter spec ./src/**/__tests__/**/*.spec.*",
+    "tdd": "mocha --watch --colors --growl --compilers jsx:babel/register --ui bdd --reporter spec ./src/**/__tests__/**/*.spec.*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:axross/bemmer.git"
+  },
+  "keywords": [
+    "react",
+    "bem",
+    "className"
+  ],
+  "author": "axross",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/axross/bemmer/issues"
+  },
+  "homepage": "https://github.com/axross/bemmer",
+  "devDependencies": {
+    "babel": "^4.6.6",
+    "mocha": "^2.1.0",
+    "should": "^5.0.1"
+  }
+}
