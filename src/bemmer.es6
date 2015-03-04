@@ -15,13 +15,21 @@ export default class Bemmer {
     return this.__join(`__${elementName}`);
   }
 
-  state(stateName = '', bool) {
-    if (bool !== void 0 && !bool) return this;
+  el(elementName) {
+    return this.element(elementName);
+  }
+
+  state(stateName = '', isEnable) {
+    if (isEnable !== void 0 && !isEnable) return this;
 
     stateName = stateName.replace(/[_\-\s]{2,}/g, '--');
     stateName = stateName.replace(/^[_\-\s]{2}/, '');
 
     return this.__join(`--${stateName}`);
+  }
+
+  st(stateName, isEnable) {
+    return this.state(stateName, isEnable);
   }
 
   toString() {

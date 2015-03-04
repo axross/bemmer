@@ -32,16 +32,30 @@ var Bemmer = (function () {
       writable: true,
       configurable: true
     },
+    el: {
+      value: function el(elementName) {
+        return this.element(elementName);
+      },
+      writable: true,
+      configurable: true
+    },
     state: {
-      value: function state(_x, bool) {
+      value: function state(_x, isEnable) {
         var stateName = arguments[0] === undefined ? "" : arguments[0];
 
-        if (bool !== void 0 && !bool) {
+        if (isEnable !== void 0 && !isEnable) {
           return this;
         }stateName = stateName.replace(/[_\-\s]{2,}/g, "--");
         stateName = stateName.replace(/^[_\-\s]{2}/, "");
 
         return this.__join("--" + stateName);
+      },
+      writable: true,
+      configurable: true
+    },
+    st: {
+      value: function st(stateName, isEnable) {
+        return this.state(stateName, isEnable);
       },
       writable: true,
       configurable: true
