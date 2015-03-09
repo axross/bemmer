@@ -4,7 +4,8 @@
 Class name generator for React.js with BEM.
 
 [![npm version](https://badge.fury.io/js/bemmer.svg)](http://badge.fury.io/js/bemmer)
-![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)
+![test](https://circleci.com/gh/axross/bemmer.svg?style=shield&circle-token=01a654ef30887aa9b843dfa7ce264dc7d942d726)
+![license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)
 
 ## Usage
 
