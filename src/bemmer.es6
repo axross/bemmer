@@ -36,7 +36,7 @@ export default class Bemmer {
     return this.__classNames.join(' ');
   }
 
-  do() {
+  get() {
     return this.toString();
   }
 
