@@ -33,11 +33,11 @@ export default class Bemmer {
   }
 
   toString() {
-    return this.__classNames.join(' ');
+    return this._toString();
   }
 
   get() {
-    return this.toString();
+    return this._toString();
   }
 
   getRoots() {
@@ -52,6 +52,10 @@ export default class Bemmer {
 
   getStates() {
     return /\-\-([^\-_]+)/.exec(this.__classNames[0]).slice(1);
+  }
+
+  _toString() {
+    return this.__classNames.join(' ');
   }
 
   __join(classNamePiece) {
