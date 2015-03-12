@@ -67,8 +67,8 @@ var Bemmer = (function () {
       writable: true,
       configurable: true
     },
-    "do": {
-      value: function _do() {
+    get: {
+      value: function get() {
         return this.toString();
       },
       writable: true,
