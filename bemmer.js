@@ -62,14 +62,14 @@ var Bemmer = (function () {
     },
     toString: {
       value: function toString() {
-        return this.__classNames.join(" ");
+        return this._toString();
       },
       writable: true,
       configurable: true
     },
     get: {
       value: function get() {
-        return this.toString();
+        return this._toString();
       },
       writable: true,
       configurable: true
@@ -93,6 +93,13 @@ var Bemmer = (function () {
     getStates: {
       value: function getStates() {
         return /\-\-([^\-_]+)/.exec(this.__classNames[0]).slice(1);
+      },
+      writable: true,
+      configurable: true
+    },
+    _toString: {
+      value: function _toString() {
+        return this.__classNames.join(" ");
       },
       writable: true,
       configurable: true
