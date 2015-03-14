@@ -29,7 +29,7 @@ export default React.createClass({
     var count  = this.state.count;
 
     return (
-      <div className={className.root}>
+      <div className={className.getBlock()}>
         <a
           className={bemmer.el('button').mo('isOdd', count % 2 === 1)}
           onClick={this._onClick}
@@ -64,7 +64,7 @@ $ npm install --save bemmer
 var Bemmer = require('bemmer');
 ```
 
-#### >= ES6
+#### >= ES6 :
 
 ```js
 import Bemmer from 'bemmer';
@@ -124,20 +124,20 @@ bemmer.element('button').modifier('isDisable', xxx.length === 0).out();
 // or 'myComponent__button myComponent__button--isDisable'
 ```
 
-#### `Bemmer#getRoot()`
+#### `Bemmer#getBlock()`
 
 ```js
 var bemmer = new Bemmer('myComponent');
 
-bemmer.getRoot();
+bemmer.getBlock();
 // => 'myComponent'
 
-bemmer.element('button').getRoot();
+bemmer.element('button').getBlock();
 // => 'myComponent'
 
 var pluralBemmer = new Bemmer('myComponent', 'yourComponent hisComponent');
 
-pluralBemmer.getRoot();
+pluralBemmer.getBlock();
 // => 'myComponent yourComponent hisComponent'
 ```
 
