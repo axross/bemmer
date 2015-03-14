@@ -1,68 +1,84 @@
-export default class Bemmer {
+const DEFAULT_ELEMENT_PREFIX  = '__';
+const DEFAULT_MODIFIER_PREFIX = '--';
+
+var _elementPrefix  = DEFAULT_ELEMENT_PREFIX;
+var _modifierPrefix = DEFAULT_MODIFIER_PREFIX;
+
+class Bemmer {
   constructor(...classNames) {
-    this.__classNames = Array.prototype.concat.apply(
-      [],
-      classNames.map(className => {
+    this._classNames = classNames
+      .map(className => {
         return className.split(/\s/).filter(v => { return v !== ''; });
       })
-    );
+      .reduce((prevArr, arr) => {
+        return prevArr.concat(arr);
+      });
+
+    this.elementNames  = [];
+    this.modifierNames = [];
   }
 
   element(elementName = '') {
-    elementName = elementName.replace(/[_\-\s]{2,}/g, '__');
-    elementName = elementName.replace(/^[_\-\s]{2}/, '');
+    if (elementName === '') return this;
 
-    return this.__join(`__${elementName}`);
+    elementName = elementName
+                    .replace(/[_\-\s]{2,}/g, '__')
+                    .replace(/^[_\-\s]{2}/, '');
+
+    this.elementNames.push(elementName);
+
+    return this;
   }
 
-  el(elementName) {
-    return this.element(elementName);
-  }
+  el(...args) { return this.element(...args); }
 
-  state(stateName = '', isEnable) {
+  modifier(modifierName = '', isEnable) {
+    if (modifierName === '')              return this;
     if (isEnable !== void 0 && !isEnable) return this;
 
-    stateName = stateName.replace(/[_\-\s]{2,}/g, '--');
-    stateName = stateName.replace(/^[_\-\s]{2}/, '');
+    modifierName = modifierName
+                     .replace(/[_\-\s]{2,}/g, '--')
+                     .replace(/^[_\-\s]{2}/, '');
 
-    return this.__join(`--${stateName}`);
+    this.modifierNames.push(modifierName);
+
+    return this;
   }
 
-  st(stateName, isEnable) {
-    return this.state(stateName, isEnable);
+  mo(...args) { return this.modifier(...args); }
+
+  root() {
+    return this._classNames
+      .map(v => { return v.split(/[\-_]{2}/)[0] })
+      .join(' ');
   }
 
-  toString() {
-    return this._toString();
+  out() {
+    return this._classNames
+      .map(c => {
+        return this.elementNames.reduce((prev, curr) => {
+          return prev + '__' + curr;
+        }, c);
+      })
+      .map(c => {
+        return this.modifierNames.map(modi => { return c + '--' + modi });
+      })
+      .reduce((prevArr, arr) => {
+        return prevArr.concat(arr);
+      })
+      .join(' ');
   }
 
-  get() {
-    return this._toString();
+  static setElementPrefix(prefix) {
+    _elementPrefix = prefix;
   }
 
-  getRoots() {
-    return this.__classNames.map(v => {
-      return v.split(/[\-_]{2}/)[0];
-    });
-  }
-
-  getElements() {
-    return /__([^\-_]+)/.exec(this.__classNames[0]).slice(1);
-  }
-
-  getStates() {
-    return /\-\-([^\-_]+)/.exec(this.__classNames[0]).slice(1);
-  }
-
-  _toString() {
-    return this.__classNames.join(' ');
-  }
-
-  __join(classNamePiece) {
-    var newClassName = this.__classNames.map(v => {
-      return v + classNamePiece;
-    }).join(' ');
-
-    return new Bemmer(newClassName);
+  static setModifierPrefix(prefix) {
+    _modifierPrefix = prefix;
   }
 }
+
+
+var className = new Bemmer('block');
+
+console.log(className.el('element').mo('modifier').el('super-element').out());

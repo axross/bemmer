@@ -3,7 +3,12 @@ import Bemmer from '../bemmer';
 
 describe('new suite', () => {
   it('new spec', () => {
-    var className = new Bemmer('myComponent', 'yourClassName largeSize', 'otherElementName');
+    var className = new Bemmer('myComponent', 'yourClassName largeSize');
+
+    className
+      .element('title')
+      .state('isEven')
+      .state('isOdd')
 
     console.log(
       className

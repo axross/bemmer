@@ -4,6 +4,12 @@ var _prototypeProperties = function (child, staticProps, instanceProps) { if (st
 
 var _classCallCheck = function (instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } };
 
+var DEFAULT_ELEMENT_PREFIX = "__";
+var DEFAULT_MODIFIER_PREFIX = "--";
+
+var _elementPrefix = DEFAULT_ELEMENT_PREFIX;
+var _modifierPrefix = DEFAULT_MODIFIER_PREFIX;
+
 var Bemmer = (function () {
   function Bemmer() {
     for (var _len = arguments.length, classNames = Array(_len), _key = 0; _key < _len; _key++) {
@@ -12,105 +18,116 @@ var Bemmer = (function () {
 
     _classCallCheck(this, Bemmer);
 
-    this.__classNames = Array.prototype.concat.apply([], classNames.map(function (className) {
+    this._classNames = classNames.map(function (className) {
       return className.split(/\s/).filter(function (v) {
         return v !== "";
       });
-    }));
+    }).reduce(function (prevArr, arr) {
+      return prevArr.concat(arr);
+    });
+
+    this.elementNames = [];
+    this.modifierNames = [];
   }
 
-  _prototypeProperties(Bemmer, null, {
+  _prototypeProperties(Bemmer, {
+    setElementPrefix: {
+      value: function setElementPrefix(prefix) {
+        _elementPrefix = prefix;
+      },
+      writable: true,
+      configurable: true
+    },
+    setModifierPrefix: {
+      value: function setModifierPrefix(prefix) {
+        _modifierPrefix = prefix;
+      },
+      writable: true,
+      configurable: true
+    }
+  }, {
     element: {
       value: function element() {
         var elementName = arguments[0] === undefined ? "" : arguments[0];
 
-        elementName = elementName.replace(/[_\-\s]{2,}/g, "__");
-        elementName = elementName.replace(/^[_\-\s]{2}/, "");
+        if (elementName === "") {
+          return this;
+        }elementName = elementName.replace(/[_\-\s]{2,}/g, "__").replace(/^[_\-\s]{2}/, "");
 
-        return this.__join("__" + elementName);
+        this.elementNames.push(elementName);
+
+        return this;
       },
       writable: true,
       configurable: true
     },
     el: {
-      value: function el(elementName) {
-        return this.element(elementName);
+      value: function el() {
+        var _ref;
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        return (_ref = this).element.apply(_ref, args);
       },
       writable: true,
       configurable: true
     },
-    state: {
-      value: function state(_x, isEnable) {
-        var stateName = arguments[0] === undefined ? "" : arguments[0];
+    modifier: {
+      value: function modifier(_x, isEnable) {
+        var modifierName = arguments[0] === undefined ? "" : arguments[0];
 
-        if (isEnable !== void 0 && !isEnable) {
+        if (modifierName === "") {
           return this;
-        }stateName = stateName.replace(/[_\-\s]{2,}/g, "--");
-        stateName = stateName.replace(/^[_\-\s]{2}/, "");
+        }if (isEnable !== void 0 && !isEnable) {
+          return this;
+        }modifierName = modifierName.replace(/[_\-\s]{2,}/g, "--").replace(/^[_\-\s]{2}/, "");
 
-        return this.__join("--" + stateName);
+        this.modifierNames.push(modifierName);
+
+        return this;
       },
       writable: true,
       configurable: true
     },
-    st: {
-      value: function st(stateName, isEnable) {
-        return this.state(stateName, isEnable);
+    mo: {
+      value: function mo() {
+        var _ref;
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+          args[_key] = arguments[_key];
+        }
+
+        return (_ref = this).modifier.apply(_ref, args);
       },
       writable: true,
       configurable: true
     },
-    toString: {
-      value: function toString() {
-        return this._toString();
-      },
-      writable: true,
-      configurable: true
-    },
-    get: {
-      value: function get() {
-        return this._toString();
-      },
-      writable: true,
-      configurable: true
-    },
-    getRoots: {
-      value: function getRoots() {
-        return this.__classNames.map(function (v) {
+    root: {
+      value: function root() {
+        return this._classNames.map(function (v) {
           return v.split(/[\-_]{2}/)[0];
-        });
-      },
-      writable: true,
-      configurable: true
-    },
-    getElements: {
-      value: function getElements() {
-        return /__([^\-_]+)/.exec(this.__classNames[0]).slice(1);
-      },
-      writable: true,
-      configurable: true
-    },
-    getStates: {
-      value: function getStates() {
-        return /\-\-([^\-_]+)/.exec(this.__classNames[0]).slice(1);
-      },
-      writable: true,
-      configurable: true
-    },
-    _toString: {
-      value: function _toString() {
-        return this.__classNames.join(" ");
-      },
-      writable: true,
-      configurable: true
-    },
-    __join: {
-      value: function __join(classNamePiece) {
-        var newClassName = this.__classNames.map(function (v) {
-          return v + classNamePiece;
         }).join(" ");
+      },
+      writable: true,
+      configurable: true
+    },
+    out: {
+      value: function out() {
+        var _this = this;
 
-        return new Bemmer(newClassName);
+        return this._classNames.map(function (c) {
+          return _this.elementNames.reduce(function (prev, curr) {
+            return prev + "__" + curr;
+          }, c);
+        }).map(function (c) {
+          return _this.modifierNames.map(function (modi) {
+            return c + "--" + modi;
+          });
+        }).reduce(function (prevArr, arr) {
+          return prevArr.concat(arr);
+        }).join(" ");
       },
       writable: true,
       configurable: true
@@ -120,4 +137,6 @@ var Bemmer = (function () {
   return Bemmer;
 })();
 
-module.exports = Bemmer;
+var className = new Bemmer("block");
+
+console.log(className.el("element").mo("modifier").el("super-element").out());
