@@ -58,13 +58,13 @@ Requirement Node.js, or Browser with [Browserify](http://browserify.org/) or [we
 $ npm install --save bemmer
 ```
 
-#### < ES5 :
+#### <= ES5 :
 
 ```js
 var Bemmer = require('bemmer');
 ```
 
-#### > ES6
+#### >= ES6
 
 ```js
 import Bemmer from 'bemmer';
