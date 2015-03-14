@@ -4,30 +4,36 @@ const DEFAULT_MODIFIER_PREFIX = '--';
 var _elementPrefix  = DEFAULT_ELEMENT_PREFIX;
 var _modifierPrefix = DEFAULT_MODIFIER_PREFIX;
 
-class Bemmer {
+export default class Bemmer {
   constructor(...classNames) {
-    this._classNames = classNames
-      .map(className => {
-        return className.split(/\s/).filter(v => { return v !== ''; });
-      })
-      .reduce((prevArr, arr) => {
-        return prevArr.concat(arr);
-      });
+    if (classNames.length === 0) {
+      this._blockNames = [];
+    } else {
+      this._blockNames = classNames
+        .map(className => {
+          return className.split(/\s/).filter(v => { return v !== '' });
+        })
+        .reduce((prevArr, arr) => {
+          return prevArr.concat(arr);
+        });
+    }
 
-    this.elementNames  = [];
-    this.modifierNames = [];
+    this._elementNames  = [];
+    this._modifierNames = [];
   }
 
   element(elementName = '') {
     if (elementName === '') return this;
 
-    elementName = elementName
-                    .replace(/[_\-\s]{2,}/g, '__')
-                    .replace(/^[_\-\s]{2}/, '');
+    var elementNames = elementName
+      .split(/[_\-\s]{2,}/g)
+      .filter(v => { return v !== '' });
 
-    this.elementNames.push(elementName);
-
-    return this;
+    return new Bemmer()._init({
+      _blockNames:    this._blockNames,
+      _elementNames:  this._elementNames.concat(elementNames),
+      _modifierNames: this._modifierNames,
+    });
   }
 
   el(...args) { return this.element(...args); }
@@ -36,37 +42,51 @@ class Bemmer {
     if (modifierName === '')              return this;
     if (isEnable !== void 0 && !isEnable) return this;
 
-    modifierName = modifierName
-                     .replace(/[_\-\s]{2,}/g, '--')
-                     .replace(/^[_\-\s]{2}/, '');
+    var modifierNames = modifierName
+      .split(/[_\-\s]{2,}/g)
+      .filter(v => { return v !== '' });
 
-    this.modifierNames.push(modifierName);
-
-    return this;
+    return new Bemmer()._init({
+      _blockNames:    this._blockNames,
+      _elementNames:  this._elementNames,
+      _modifierNames: this._modifierNames.concat(modifierNames),
+    });
   }
 
   mo(...args) { return this.modifier(...args); }
 
-  root() {
-    return this._classNames
+  getBlock() {
+    return this._blockNames
       .map(v => { return v.split(/[\-_]{2}/)[0] })
       .join(' ');
   }
 
   out() {
-    return this._classNames
-      .map(c => {
-        return this.elementNames.reduce((prev, curr) => {
-          return prev + '__' + curr;
-        }, c);
-      })
-      .map(c => {
-        return this.modifierNames.map(modi => { return c + '--' + modi });
-      })
-      .reduce((prevArr, arr) => {
+    var classNames = this._blockNames.map(c => {
+      return this._elementNames.reduce((prev, curr) => {
+        return prev + _elementPrefix + curr;
+      }, c);
+    });
+
+    if (this._modifierNames.length > 0) {
+      classNames = classNames.map(c => {
+        return this._modifierNames.map(modi => {
+          return c + _modifierPrefix + modi;
+        });
+      }).reduce((prevArr, arr) => {
         return prevArr.concat(arr);
-      })
-      .join(' ');
+      });
+    }
+
+    return classNames.join(' ');
+  }
+
+  _init(prop) {
+    this._blockNames    = prop._blockNames;
+    this._elementNames  = prop._elementNames;
+    this._modifierNames = prop._modifierNames;
+
+    return this;
   }
 
   static setElementPrefix(prefix) {
@@ -76,9 +96,12 @@ class Bemmer {
   static setModifierPrefix(prefix) {
     _modifierPrefix = prefix;
   }
+
+  static get DEFAULT_ELEMENT_PREFIX() {
+    return DEFAULT_ELEMENT_PREFIX;
+  }
+
+  static get DEFAULT_MODIFIER_PREFIX() {
+    return DEFAULT_MODIFIER_PREFIX;
+  }
 }
-
-
-var className = new Bemmer('block');
-
-console.log(className.el('element').mo('modifier').el('super-element').out());

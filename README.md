@@ -50,6 +50,26 @@ export default React.createClass({
 </div>
 ```
 
+## Usage
+
+Requirement Node.js, or Browser with Browserify or Webpack.
+
+```bash
+$ npm install --save bemmer
+```
+
+#### < ES5 :
+
+```js
+var Bemmer = require('bemmer');
+```
+
+#### > ES6
+
+```es6
+import Bemmer from 'bemmer';
+```
+
 ## API
 
 ### `new Bemmer(...classNames)`
@@ -89,8 +109,8 @@ bemmer.element('__button__label').out();
 // => 'myComponent__button__label yourComponent__button__label'
 ```
 
-#### `Bemmer#modifier(modifierName)`
-#### `Bemmer#mo(modifierName)`
+#### `Bemmer#modifier(modifierName, isEnable)`
+#### `Bemmer#mo(modifierName, isEnable)`
 
 ```es6
 var bemmer = new Bemmer('myComponent');
@@ -104,19 +124,55 @@ bemmer.element('button').modifier('isDisable', message.length === '0).out();
 // or 'myComponent__button myComponent__button--isDisable'
 ```
 
-#### `Bemmer#root()`
+#### `Bemmer#getRoot()`
 
 ```es6
 var bemmer = new Bemmer('myComponent');
 
-bemmer.root();
+bemmer.getRoot();
 // => 'myComponent'
 
-bemmer.element('button').root();
+bemmer.element('button').getRoot();
 // => 'myComponent'
 
 var pluralBemmer = new Bemmer('myComponent', 'yourComponent hisComponent');
 
-pluralBemmer.root();
+pluralBemmer.getRoot();
 // => 'myComponent yourComponent hisComponent'
 ```
+
+### `Bemmer.setElementPrefix(prefix)`
+
+Change element prefix.
+
+```es6
+Bemmer.setElementPrefix('_');
+
+var bemmer = new Bemmer('block');
+
+bemmer.element('button').out();
+// => 'block_button'
+
+Bemmer.setModifierPrefix(Bemmer.DEFAULT_ELEMENT_PREFIX);
+// Set default element prefix.
+```
+
+### `Bemmer.setModifierPrefix(prefix)`
+
+Change modifier prefix.
+
+```es6
+Bemmer.setModifierPrefix('-');
+
+var bemmer = new Bemmer('block');
+
+bemmer.modifier('isActive').out();
+// => 'block-isActive'
+
+Bemmer.setModifierPrefix(Bemmer.DEFAULT_MODIFIER_PREFIX);
+// Set default modifier prefix.
+```
+
+## License
+
+MIT

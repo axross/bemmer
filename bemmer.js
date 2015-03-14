@@ -18,16 +18,20 @@ var Bemmer = (function () {
 
     _classCallCheck(this, Bemmer);
 
-    this._classNames = classNames.map(function (className) {
-      return className.split(/\s/).filter(function (v) {
-        return v !== "";
+    if (classNames.length === 0) {
+      this._blockNames = [];
+    } else {
+      this._blockNames = classNames.map(function (className) {
+        return className.split(/\s/).filter(function (v) {
+          return v !== "";
+        });
+      }).reduce(function (prevArr, arr) {
+        return prevArr.concat(arr);
       });
-    }).reduce(function (prevArr, arr) {
-      return prevArr.concat(arr);
-    });
+    }
 
-    this.elementNames = [];
-    this.modifierNames = [];
+    this._elementNames = [];
+    this._modifierNames = [];
   }
 
   _prototypeProperties(Bemmer, {
@@ -44,6 +48,18 @@ var Bemmer = (function () {
       },
       writable: true,
       configurable: true
+    },
+    DEFAULT_ELEMENT_PREFIX: {
+      get: function () {
+        return DEFAULT_ELEMENT_PREFIX;
+      },
+      configurable: true
+    },
+    DEFAULT_MODIFIER_PREFIX: {
+      get: function () {
+        return DEFAULT_MODIFIER_PREFIX;
+      },
+      configurable: true
     }
   }, {
     element: {
@@ -52,11 +68,14 @@ var Bemmer = (function () {
 
         if (elementName === "") {
           return this;
-        }elementName = elementName.replace(/[_\-\s]{2,}/g, "__").replace(/^[_\-\s]{2}/, "");
+        }var elementNames = elementName.split(/[_\-\s]{2,}/g).filter(function (v) {
+          return v !== "";
+        });
 
-        this.elementNames.push(elementName);
-
-        return this;
+        return new Bemmer()._init({
+          _blockNames: this._blockNames,
+          _elementNames: this._elementNames.concat(elementNames),
+          _modifierNames: this._modifierNames });
       },
       writable: true,
       configurable: true
@@ -82,11 +101,14 @@ var Bemmer = (function () {
           return this;
         }if (isEnable !== void 0 && !isEnable) {
           return this;
-        }modifierName = modifierName.replace(/[_\-\s]{2,}/g, "--").replace(/^[_\-\s]{2}/, "");
+        }var modifierNames = modifierName.split(/[_\-\s]{2,}/g).filter(function (v) {
+          return v !== "";
+        });
 
-        this.modifierNames.push(modifierName);
-
-        return this;
+        return new Bemmer()._init({
+          _blockNames: this._blockNames,
+          _elementNames: this._elementNames,
+          _modifierNames: this._modifierNames.concat(modifierNames) });
       },
       writable: true,
       configurable: true
@@ -104,9 +126,9 @@ var Bemmer = (function () {
       writable: true,
       configurable: true
     },
-    root: {
-      value: function root() {
-        return this._classNames.map(function (v) {
+    getBlock: {
+      value: function getBlock() {
+        return this._blockNames.map(function (v) {
           return v.split(/[\-_]{2}/)[0];
         }).join(" ");
       },
@@ -117,17 +139,34 @@ var Bemmer = (function () {
       value: function out() {
         var _this = this;
 
-        return this._classNames.map(function (c) {
-          return _this.elementNames.reduce(function (prev, curr) {
-            return prev + "__" + curr;
+        var classNames = this._blockNames.map(function (c) {
+          return _this._elementNames.reduce(function (prev, curr) {
+            return prev + _elementPrefix + curr;
           }, c);
-        }).map(function (c) {
-          return _this.modifierNames.map(function (modi) {
-            return c + "--" + modi;
+        });
+
+        if (this._modifierNames.length > 0) {
+          classNames = classNames.map(function (c) {
+            return _this._modifierNames.map(function (modi) {
+              return c + _modifierPrefix + modi;
+            });
+          }).reduce(function (prevArr, arr) {
+            return prevArr.concat(arr);
           });
-        }).reduce(function (prevArr, arr) {
-          return prevArr.concat(arr);
-        }).join(" ");
+        }
+
+        return classNames.join(" ");
+      },
+      writable: true,
+      configurable: true
+    },
+    _init: {
+      value: function _init(prop) {
+        this._blockNames = prop._blockNames;
+        this._elementNames = prop._elementNames;
+        this._modifierNames = prop._modifierNames;
+
+        return this;
       },
       writable: true,
       configurable: true
@@ -137,6 +176,4 @@ var Bemmer = (function () {
   return Bemmer;
 })();
 
-var className = new Bemmer("block");
-
-console.log(className.el("element").mo("modifier").el("super-element").out());
+module.exports = Bemmer;
