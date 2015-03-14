@@ -1,4 +1,4 @@
-[WIP] Bemmer.js
+Bemmer.js
 ================================
 
 Bemmer can generate `className` attribute [React](http://facebook.github.io/react/) friendly, with write only a line.
