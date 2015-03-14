@@ -75,11 +75,13 @@ bemmer.element('button').out();
 ```
 
 #### `Bemmer#element(elementName)`
+#### `Bemmer#el(elementName)`
 
 ```es6
 var bemmer = new Bemmer('myComponent', 'yourComponent');
 
 bemmer.element('button').out();
+bemmer.el('button').out();
 // => 'myComponent__button yourComponent__button'
 
 bemmer.element('button').element('label').out();
@@ -88,14 +90,16 @@ bemmer.element('__button__label').out();
 ```
 
 #### `Bemmer#modifier(modifierName)`
+#### `Bemmer#mo(modifierName)`
 
 ```es6
 var bemmer = new Bemmer('myComponent');
 
 bemmer.element('button').modifier('isBlueColor').out();
+bemmer.el('button').mo('isBlueColor').out();
 // => 'myComponent__button myComponent__button--isBlueColor'
 
-bemmer.element('button').modifier('isDisable', this.state.xxx === 'abc').out();
+bemmer.element('button').modifier('isDisable', message.length === '0).out();
 // => 'myComponent__button'
 // or 'myComponent__button myComponent__button--isDisable'
 ```
@@ -113,6 +117,6 @@ bemmer.element('button').root();
 
 var pluralBemmer = new Bemmer('myComponent', 'yourComponent hisComponent');
 
-bemmer.root();
+pluralBemmer.root();
 // => 'myComponent yourComponent hisComponent'
 ```
