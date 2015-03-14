@@ -4,10 +4,10 @@
   "description": "Class name generator for React.js with BEM.",
   "main": "bemmer.js",
   "scripts": {
-    "prepublish": "npm run build",
     "build": "babel src/bemmer.es6 -o bemmer.js",
     "test": "mocha --colors --growl --compilers es6:babel/register --ui bdd --reporter spec ./src/**/__tests__/**/*.spec.*",
-    "tdd": "mocha --watch --colors --growl --compilers es6:babel/register --ui bdd --reporter spec ./src/**/__tests__/**/*.spec.*"
+    "tdd": "mocha --watch --colors --growl --compilers es6:babel/register --ui bdd --reporter spec ./src/**/__tests__/**/*.spec.*",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   "keywords": [
     "react",
     "bem",
-    "className"
+    "classname"
   ],
   "author": "axross",
   "license": "MIT",

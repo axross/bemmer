@@ -1,7 +1,7 @@
 [WIP] Bemmer.js
 ================================
 
-Bemmer can generate `className` attribute for React, with write only a line.
+Bemmer can generate `className` attribute [React](http://facebook.github.io/react/) friendly, with write only a line.
 
 [![npm version](https://badge.fury.io/js/bemmer.svg)](http://badge.fury.io/js/bemmer)
 ![test](https://circleci.com/gh/axross/bemmer.svg?style=shield&circle-token=01a654ef30887aa9b843dfa7ce264dc7d942d726)
@@ -11,7 +11,7 @@ Bemmer can generate `className` attribute for React, with write only a line.
 
 #### JSX :
 
-```es6
+```jsx
 import React  from 'react';
 import Bemmer from 'bemmer';
 
@@ -52,9 +52,9 @@ export default React.createClass({
 
 ## Usage
 
-Requirement Node.js, or Browser with Browserify or Webpack.
+Requirement Node.js, or Browser with [Browserify](http://browserify.org/) or [webpack](http://webpack.github.io/).
 
-```bash
+```sh
 $ npm install --save bemmer
 ```
 
@@ -66,7 +66,7 @@ var Bemmer = require('bemmer');
 
 #### > ES6
 
-```es6
+```js
 import Bemmer from 'bemmer';
 ```
 
@@ -74,7 +74,7 @@ import Bemmer from 'bemmer';
 
 ### `new Bemmer(...classNames)`
 
-```es6
+```js
 var bemmer = new Bemmer('myComponent');
 
 // can plural arguments
@@ -84,7 +84,7 @@ var pluralBemmerB = new Bemmer('myComponent yourComponent', 'hisComponent');
 
 #### `Bemmer#out()`
 
-```es6
+```js
 var bemmer = new Bemmer('myComponent');
 
 bemmer.out();
@@ -97,7 +97,7 @@ bemmer.element('button').out();
 #### `Bemmer#element(elementName)`
 #### `Bemmer#el(elementName)`
 
-```es6
+```js
 var bemmer = new Bemmer('myComponent', 'yourComponent');
 
 bemmer.element('button').out();
@@ -112,21 +112,21 @@ bemmer.element('__button__label').out();
 #### `Bemmer#modifier(modifierName, isEnable)`
 #### `Bemmer#mo(modifierName, isEnable)`
 
-```es6
+```js
 var bemmer = new Bemmer('myComponent');
 
 bemmer.element('button').modifier('isBlueColor').out();
 bemmer.el('button').mo('isBlueColor').out();
 // => 'myComponent__button myComponent__button--isBlueColor'
 
-bemmer.element('button').modifier('isDisable', message.length === '0).out();
+bemmer.element('button').modifier('isDisable', xxx.length === 0).out();
 // => 'myComponent__button'
 // or 'myComponent__button myComponent__button--isDisable'
 ```
 
 #### `Bemmer#getRoot()`
 
-```es6
+```js
 var bemmer = new Bemmer('myComponent');
 
 bemmer.getRoot();
@@ -145,7 +145,7 @@ pluralBemmer.getRoot();
 
 Change element prefix.
 
-```es6
+```js
 Bemmer.setElementPrefix('_');
 
 var bemmer = new Bemmer('block');
@@ -161,7 +161,7 @@ Bemmer.setModifierPrefix(Bemmer.DEFAULT_ELEMENT_PREFIX);
 
 Change modifier prefix.
 
-```es6
+```js
 Bemmer.setModifierPrefix('-');
 
 var bemmer = new Bemmer('block');
