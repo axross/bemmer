@@ -4,7 +4,7 @@ Bemmer
 Bemmer can generate `className` attribute [React](http://facebook.github.io/react/) friendly, with write only a line.
 
 [![npm version](https://badge.fury.io/js/bemmer.svg)](http://badge.fury.io/js/bemmer)
-![test](https://circleci.com/gh/axross/bemmer.svg?style=shield&circle-token=01a654ef30887aa9b843dfa7ce264dc7d942d726)
+[![Build Status](https://drone.io/github.com/axross/bemmer/status.png)](https://drone.io/github.com/axross/bemmer/latest)
 ![license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)
 
 ## Example
