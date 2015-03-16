@@ -148,7 +148,9 @@ var Bemmer = (function () {
         if (this._modifierNames.length > 0) {
           classNames = classNames.map(function (c) {
             return _this._modifierNames.map(function (modi) {
-              return c + _modifierPrefix + modi;
+              return [c, c + _modifierPrefix + modi];
+            }).reduce(function (prevArr, arr) {
+              return prevArr.concat(arr);
             });
           }).reduce(function (prevArr, arr) {
             return prevArr.concat(arr);

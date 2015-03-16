@@ -71,7 +71,10 @@ export default class Bemmer {
     if (this._modifierNames.length > 0) {
       classNames = classNames.map(c => {
         return this._modifierNames.map(modi => {
-          return c + _modifierPrefix + modi;
+          return [c, c + _modifierPrefix + modi];
+        })
+        .reduce((prevArr, arr) => {
+          return prevArr.concat(arr);
         });
       }).reduce((prevArr, arr) => {
         return prevArr.concat(arr);

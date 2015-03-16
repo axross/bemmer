@@ -54,24 +54,31 @@ describe('Bemmer', () => {
       var bemmer = new Bemmer('block');
 
       should(bemmer.element('element').modifier('modifier').out())
-        .be.equal('block__element--modifier');
+        .be.equal('block__element block__element--modifier');
 
       should(bemmer.modifier('modifierist').element('elemental').out())
-        .be.equal('block__elemental--modifierist');
+        .be.equal('block__elemental block__elemental--modifierist');
     });
 
     it('should can apply plural blocks', () => {
       var bemmer = new Bemmer('block', 'blocken blocking');
 
-      should(bemmer.modifier('modifier').out())
-        .be.equal('block--modifier blocken--modifier blocking--modifier');
+      should(bemmer.modifier('modifier').out().split(' '))
+      .be.containDeep([
+        'block',
+        'blocken',
+        'blocking',
+        'block--modifier',
+        'blocken--modifier',
+        'blocking--modifier'
+      ]);
     });
 
     it('should apply enable/disable with 2nd argument', () => {
       var bemmer = new Bemmer('block');
 
       should(bemmer.element('element').modifier('modifier', true).out())
-        .be.equal('block__element--modifier');
+        .be.equal('block__element block__element--modifier');
 
       should(bemmer.element('elemental').modifier('modifierist', false).out())
         .be.equal('block__elemental');
@@ -80,8 +87,14 @@ describe('Bemmer', () => {
     it('should dont overlap modifier', () => {
       var bemmerA = new Bemmer('block');
 
-      should(bemmerA.modifier('modifier').modifier('modifierist').out())
-        .be.equal('block--modifier block--modifierist');
+      should(
+        bemmerA.modifier('modifier').modifier('modifierist').out().split(' ')
+      )
+        .be.containDeep([
+          'block',
+          'block--modifier',
+          'block--modifierist'
+        ]);
 
       var bemmerB = new Bemmer('block blocking', 'blocken');
 
@@ -104,7 +117,7 @@ describe('Bemmer', () => {
       var bemmer = new Bemmer('block');
 
       should(bemmer.element('element').modifier('modifier').out())
-        .be.equal('block__element--modifier');
+        .be.equal('block__element block__element--modifier');
     });
   })
 
@@ -141,14 +154,14 @@ describe('Bemmer', () => {
       var bemmer = new Bemmer('block');
 
       should(bemmer.modifier('modifier').out())
-        .be.equal('block->>-modifier');
+        .be.equal('block block->>-modifier');
 
       Bemmer.setModifierPrefix('*^q^*');
 
       var bemmer = new Bemmer('block');
 
       should(bemmer.modifier('modifier').out())
-        .be.equal('block*^q^*modifier');
+        .be.equal('block block*^q^*modifier');
     });
   });
 })
