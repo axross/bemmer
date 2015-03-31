@@ -10,6 +10,7 @@ export default class Bemmer {
       this._blockNames = [];
     } else {
       this._blockNames = classNames
+        .filter(className => typeof className === 'string')
         .map(className => {
           return className.split(/\s/).filter(v => { return v !== '' });
         })

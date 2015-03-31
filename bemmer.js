@@ -21,7 +21,9 @@ var Bemmer = (function () {
     if (classNames.length === 0) {
       this._blockNames = [];
     } else {
-      this._blockNames = classNames.map(function (className) {
+      this._blockNames = classNames.filter(function (className) {
+        return typeof className === "string";
+      }).map(function (className) {
         return className.split(/\s/).filter(function (v) {
           return v !== "";
         });
