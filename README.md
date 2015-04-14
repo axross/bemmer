@@ -1,7 +1,7 @@
 Bemmer
 ================================
 
-Bemmer can generate `className` attribute [React](http://facebook.github.io/react/) friendly, with write only a line.
+How do you write the `className` in the code? If your `className` is not a line, Bemmer is the solution.
 
 [![npm version](https://badge.fury.io/js/bemmer.svg)](http://badge.fury.io/js/bemmer)
 [![Build Status](https://drone.io/github.com/axross/bemmer/status.png)](https://drone.io/github.com/axross/bemmer/latest)
@@ -42,6 +42,8 @@ export default React.createClass({
 });
 ```
 
+Bemmer can generate `className` that [React](http://facebook.github.io/react/) friendly that write only a line.
+
 #### Output :
 
 ```html
@@ -52,7 +54,7 @@ export default React.createClass({
 
 ## Usage
 
-Requirement Node.js, or Browser with [Browserify](http://browserify.org/) or [webpack](http://webpack.github.io/).
+Requirement Node.js or Browser with [Browserify](http://browserify.org/) or [webpack](http://webpack.github.io/).
 
 ```sh
 $ npm install --save bemmer
@@ -82,6 +84,8 @@ var pluralBemmerA = new Bemmer('myComponent', this.props.classname);
 var pluralBemmerB = new Bemmer('myComponent yourComponent', 'hisComponent');
 ```
 
+Create a instance. Bemmer can take arguments that it is Block of the BEM.
+
 #### `Bemmer#out()`
 
 ```js
@@ -93,6 +97,8 @@ bemmer.out();
 bemmer.element('button').out();
 // => 'myComponent__button'
 ```
+
+Generate `className`. If you called `.element()` or `.modifier()` before `.out()`, there are applied on the `out()`.
 
 #### `Bemmer#element(elementName)`
 #### `Bemmer#el(elementName)`
@@ -109,6 +115,8 @@ bemmer.element('__button__label').out();
 // => 'myComponent__button__label yourComponent__button__label'
 ```
 
+Set some Elements of BEM.
+
 #### `Bemmer#modifier(modifierName, isEnable)`
 #### `Bemmer#mo(modifierName, isEnable)`
 
@@ -123,6 +131,8 @@ bemmer.element('button').modifier('isDisable', xxx.length === 0).out();
 // => 'myComponent__button'
 // or 'myComponent__button myComponent__button--isDisable'
 ```
+
+Set some Modifiers of BEM. `.modifier()` can take 2nd argument that it means applied.
 
 #### `Bemmer#getBlock()`
 
