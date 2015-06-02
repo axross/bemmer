@@ -1,111 +1,76 @@
 const DEFAULT_ELEMENT_PREFIX  = '__';
 const DEFAULT_MODIFIER_PREFIX = '--';
+const SPLITTER_REGEXP         = /[\-\_\.\*\+\:\;\/]{2,}/g;
 
-var _elementPrefix  = DEFAULT_ELEMENT_PREFIX;
-var _modifierPrefix = DEFAULT_MODIFIER_PREFIX;
+var elementPrefix  = DEFAULT_ELEMENT_PREFIX;
+var modifierPrefix = DEFAULT_MODIFIER_PREFIX;
 
-export default class Bemmer {
-  constructor(...classNames) {
-    if (classNames.length === 0) {
-      this._blockNames = [];
-    } else {
-      this._blockNames = classNames
-        .filter(className => typeof className === 'string')
-        .map(className => {
-          return className.split(/\s/).filter(v => { return v !== '' });
-        })
-        .reduce((prevArr, arr) => {
-          return prevArr.concat(arr);
-        });
-    }
+const extractElements = __whole => {
+  const whole = __whole || '';
 
-    this._elementNames  = [];
-    this._modifierNames = [];
-  }
+  return whole.split(SPLITTER_REGEXP)
+    .filter(piece => piece.length >= 1);
+};
 
-  element(elementName = '') {
-    if (elementName === '') return this;
+const extractModifiers = __pairs => {
+  const pairs = __pairs || {};
 
-    var elementNames = elementName
-      .split(/[_\-\s]{2,}/g)
-      .filter(v => { return v !== '' });
+  return Object.keys(pairs)
+    .filter(key => pairs[key])
+    .map(key => key);
+};
 
-    return new Bemmer()._init({
-      _blockNames:    this._blockNames,
-      _elementNames:  this._elementNames.concat(elementNames),
-      _modifierNames: this._modifierNames,
-    });
-  }
+const attachElements = (classNames, elements) => {
+  if (elements.length === 0) return classNames;
 
-  el(...args) { return this.element(...args); }
+  return classNames
+    .map(cn => cn + elementPrefix + elements.join(elementPrefix));
+};
 
-  modifier(modifierName = '', isEnable) {
-    if (modifierName === '')              return this;
-    if (isEnable !== void 0 && !isEnable) return this;
+const attachModifiers = (classNames, modifiers) => {
+  const attached = classNames
+    .map(cn => {
+      return modifiers
+        .map(mo => cn + modifierPrefix + mo);
+    })
+    .reduce((prev, curr) => prev.concat(curr))
 
-    var modifierNames = modifierName
-      .split(/[_\-\s]{2,}/g)
-      .filter(v => { return v !== '' });
+  return classNames.concat(attached);
+};
 
-    return new Bemmer()._init({
-      _blockNames:    this._blockNames,
-      _elementNames:  this._elementNames,
-      _modifierNames: this._modifierNames.concat(modifierNames),
-    });
-  }
+const bemmer = (...classNames) => {
+  var fixedElements  = [];
+  var fixedModifiers = [];
 
-  mo(...args) { return this.modifier(...args); }
+  const generator = (elementWhole, modifierPairs) => {
+    const elements  = fixedElements.concat(extractElements(elementWhole));
+    const modifiers = fixedModifiers.concat(extractModifiers(modifierPairs));
 
-  getBlock() {
-    return this._blockNames
-      .map(v => { return v.split(/[\-_]{2}/)[0] })
-      .join(' ');
-  }
+    const elementsAttached  = attachElements(classNames, elements);
+    const modifiersAttached = attachModifiers(elementsAttached, modifiers);
 
-  out() {
-    var classNames = this._blockNames.map(c => {
-      return this._elementNames.reduce((prev, curr) => {
-        return prev + _elementPrefix + curr;
-      }, c);
-    });
+    return modifiersAttached.join(' ');
+  };
 
-    if (this._modifierNames.length > 0) {
-      classNames = classNames.map(c => {
-        return this._modifierNames.map(modi => {
-          return [c, c + _modifierPrefix + modi];
-        })
-        .reduce((prevArr, arr) => {
-          return prevArr.concat(arr);
-        });
-      }).reduce((prevArr, arr) => {
-        return prevArr.concat(arr);
-      });
-    }
+  generator.set = (elementWhole, modifierPairs) => {
+    fixedElements  = fixedElements.concat(extractElements(elementWhole));
+    fixedModifiers = fixedModifiers.concat(extractModifiers(modifierPairs));
 
-    return classNames.join(' ');
-  }
+    return generator;
+  };
 
-  _init(prop) {
-    this._blockNames    = prop._blockNames;
-    this._elementNames  = prop._elementNames;
-    this._modifierNames = prop._modifierNames;
+  return generator;
+};
 
-    return this;
-  }
+bemmer.setElementPrefix = prefix => {
+  elementPrefix = prefix;
+};
 
-  static setElementPrefix(prefix) {
-    _elementPrefix = prefix;
-  }
+bemmer.setModifierPrefix = prefix => {
+  modifierPrefix = prefix;
+};
 
-  static setModifierPrefix(prefix) {
-    _modifierPrefix = prefix;
-  }
+bemmer.DEFAULT_ELEMENT_PREFIX  = DEFAULT_ELEMENT_PREFIX;
+bemmer.DEFAULT_MODIFIER_PREFIX = DEFAULT_MODIFIER_PREFIX;
 
-  static get DEFAULT_ELEMENT_PREFIX() {
-    return DEFAULT_ELEMENT_PREFIX;
-  }
-
-  static get DEFAULT_MODIFIER_PREFIX() {
-    return DEFAULT_MODIFIER_PREFIX;
-  }
-}
+export default bemmer;

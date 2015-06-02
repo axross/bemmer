@@ -1,167 +1,152 @@
-import should from 'should';
-import Bemmer from '../bemmer';
+import expect from 'expect.js';
+import bemmer from '../bemmer';
 
 describe('Bemmer', () => {
-  describe('Bemmer#getBlock()', () => {
-    it('should returns base class names', () => {
-      var bemmerA = new Bemmer('block');
+  describe('bemmer()', () => {
+    it('can generate className with received elements and modifiers', () => {
+      const cn = bemmer('block');
+      const generated = cn('__element__eelement', {
+        isModifier: true,
+        isMmodifier: false,
+      });
+      const classNames = generated.split(' ');
 
-      should(bemmerA.getBlock())
-        .be.equal('block');
+      expect(classNames).to.contain('block__element__eelement');
+      expect(classNames).to.contain('block__element__eelement--isModifier');
+    });
 
-      var bemmerB = new Bemmer('block blocken ', 'blocking');
+    it('can receive the plural classNames', () => {
+      const cn = bemmer('block', 'bblock');
+      const generated = cn('__element__eelement', {
+        isModifier: true,
+        isMmodifier: false,
+      });
+      const classNames = generated.split(' ');
 
-      should(bemmerB.getBlock())
-        .be.equal('block blocken blocking');
+      expect(classNames).to.contain('block__element__eelement');
+      expect(classNames).to.contain('bblock__element__eelement');
+      expect(classNames).to.contain('block__element__eelement--isModifier');
+      expect(classNames).to.contain('bblock__element__eelement--isModifier');
+    });
 
-      var bemmerC = new Bemmer('block', 'blocker');
+    it('should return plain className if it did not receive any arguments', () => {
+      const cn = bemmer('block', 'bblock');
+      const generated = cn();
+      const classNames = generated.split(' ');
 
-      should(bemmerC.element('element').modifier('isState').getBlock())
-        .be.equal('block blocker');
+      expect(classNames).to.contain('block');
+      expect(classNames).to.contain('bblock');
+    });
+
+    it('should generate no-modifier-attached-className if it did not receive any modifiers', () => {
+      const cn = bemmer('block', 'bblock');
+      const generated = cn('__element__eelement');
+      const classNames = generated.split(' ');
+
+      expect(classNames).to.contain('block__element__eelement');
+      expect(classNames).to.contain('bblock__element__eelement');
+    });
+
+    it('should generate no-element-attached-className if it did not receive any elements', () => {
+      const cn = bemmer('block', 'bblock');
+      const generated = cn(null, {
+        isModifier: true,
+        isMmodifier: false,
+      });
+      const classNames = generated.split(' ');
+
+      expect(classNames).to.contain('block');
+      expect(classNames).to.contain('block--isModifier');
+      expect(classNames).to.contain('bblock');
+      expect(classNames).to.contain('bblock--isModifier');
     });
   });
 
-  describe('Bemmer#element()', () => {
-    it('should play a "Element" role of BEM', () => {
-      var bemmer = new Bemmer('block');
+  describe('bemmer.set()', () => {
+    it('should return extended generate() function that includes received elements and modifiers', () => {
+      const cn = bemmer('block', 'bblock');
+      const fixed = cn.set('__element__eelement', {
+        isModifier: true,
+        isMmodifier: false,
+      });
+      const fixedClassNames = fixed().split(' ');
 
-      should(bemmer.element('element').out())
-        .be.equal('block__element');
+      expect(fixedClassNames).to.contain(
+        'block__element__eelement'
+      );
+      expect(fixedClassNames).to.contain(
+        'bblock__element__eelement'
+      );
+      expect(fixedClassNames).to.contain(
+        'block__element__eelement--isModifier'
+      );
+      expect(fixedClassNames).to.contain(
+        'bblock__element__eelement--isModifier'
+      );
 
-      should(bemmer.element('elementes').element('elemental').out())
-        .be.equal('block__elementes__elemental');
-    });
+      const extended = fixed('__eeelement', {
+        isMmmodifier: true,
+      });
+      const extendedClassNames = extended.split(' ');
 
-    it('should can apply plural blocks', () => {
-      var bemmer = new Bemmer('block', 'blocken blocking');
-
-      should(bemmer.element('element').out())
-        .be.equal('block__element blocken__element blocking__element');
-    });
-  });
-
-  describe('Bemmer#el()', () => {
-    it('should alias to Bemmer#element()', () => {
-      var bemmer = new Bemmer('block');
-
-      should(bemmer.element('element').out())
-        .be.equal('block__element');
-    });
-  });
-
-  describe('Bemmer#modifier()', () => {
-    it('should play a "Modifier" roke of BEM', () => {
-      var bemmer = new Bemmer('block');
-
-      should(bemmer.element('element').modifier('modifier').out())
-        .be.equal('block__element block__element--modifier');
-
-      should(bemmer.modifier('modifierist').element('elemental').out())
-        .be.equal('block__elemental block__elemental--modifierist');
-    });
-
-    it('should can apply plural blocks', () => {
-      var bemmer = new Bemmer('block', 'blocken blocking');
-
-      should(bemmer.modifier('modifier').out().split(' '))
-      .be.containDeep([
-        'block',
-        'blocken',
-        'blocking',
-        'block--modifier',
-        'blocken--modifier',
-        'blocking--modifier'
-      ]);
-    });
-
-    it('should apply enable/disable with 2nd argument', () => {
-      var bemmer = new Bemmer('block');
-
-      should(bemmer.element('element').modifier('modifier', true).out())
-        .be.equal('block__element block__element--modifier');
-
-      should(bemmer.element('elemental').modifier('modifierist', false).out())
-        .be.equal('block__elemental');
-    });
-
-    it('should dont overlap modifier', () => {
-      var bemmerA = new Bemmer('block');
-
-      should(
-        bemmerA.modifier('modifier').modifier('modifierist').out().split(' ')
-      )
-        .be.containDeep([
-          'block',
-          'block--modifier',
-          'block--modifierist'
-        ]);
-
-      var bemmerB = new Bemmer('block blocking', 'blocken');
-
-      should(
-        bemmerB.el('element').mo('modifier').mo('modifierist').out().split(' ')
-      )
-        .be.containDeep([
-          'block__element--modifier',
-          'blocking__element--modifier',
-          'blocken__element--modifier',
-          'block__element--modifierist',
-          'blocking__element--modifierist',
-          'blocken__element--modifierist'
-        ]);
+      expect(extendedClassNames).to.contain(
+        'block__element__eelement__eeelement'
+      );
+      expect(extendedClassNames).to.contain(
+        'bblock__element__eelement__eeelement'
+      );
+      expect(extendedClassNames).to.contain(
+        'block__element__eelement__eeelement--isModifier'
+      );
+      expect(extendedClassNames).to.contain(
+        'bblock__element__eelement__eeelement--isModifier'
+      );
+      expect(extendedClassNames).to.contain(
+        'block__element__eelement__eeelement--isMmmodifier'
+      );
+      expect(extendedClassNames).to.contain(
+        'bblock__element__eelement__eeelement--isMmmodifier'
+      );
     });
   });
 
-  describe('Bemmer#mo()', () => {
-    it('should alias to Bemmer#modifier', () => {
-      var bemmer = new Bemmer('block');
-
-      should(bemmer.element('element').modifier('modifier').out())
-        .be.equal('block__element block__element--modifier');
-    });
-  })
-
-  describe('Bemmer.setElementPrefix()', () => {
+  describe('bemmer.setElementPrefix()', () => {
     afterEach(() => {
-      Bemmer.setElementPrefix(Bemmer.DEFAULT_ELEMENT_PREFIX);
+      bemmer.setElementPrefix(bemmer.DEFAULT_ELEMENT_PREFIX);
     });
 
-    it('should change element prefix', () => {
-      Bemmer.setElementPrefix('-<<-');
+    it('should set prefix of element that used when bemmer() ', () => {
+      bemmer.setElementPrefix('_-_-');
 
-      var bemmer = new Bemmer('block');
+      const cn = bemmer('block');
+      const generated = cn('__element__eelement', {
+        isModifier: true,
+        isMmodifier: false,
+      });
+      const classNames = generated.split(' ');
 
-      should(bemmer.element('element').out())
-        .be.equal('block-<<-element');
-
-      Bemmer.setElementPrefix('xωx');
-
-      var bemmer = new Bemmer('block');
-
-      should(bemmer.element('element').out())
-        .be.equal('blockxωxelement');
+      expect(classNames).to.contain('block_-_-element_-_-eelement');
+      expect(classNames).to.contain('block_-_-element_-_-eelement--isModifier');
     });
   });
 
-  describe('Bemmer.setModifierPrefix()', () => {
+  describe('bemmer.setElementPrefix()', () => {
     afterEach(() => {
-      Bemmer.setModifierPrefix(Bemmer.DEFAULT_MODIFIER_PREFIX);
+      bemmer.setModifierPrefix(bemmer.DEFAULT_MODIFIER_PREFIX);
     });
 
-    it('should change modifier prefix', () => {
-      Bemmer.setModifierPrefix('->>-');
+    it('should set prefix of element that used when bemmer() ', () => {
+      bemmer.setModifierPrefix('$#$#');
 
-      var bemmer = new Bemmer('block');
+      const cn = bemmer('block');
+      const generated = cn('__element__eelement', {
+        isModifier: true,
+        isMmodifier: false,
+      });
+      const classNames = generated.split(' ');
 
-      should(bemmer.modifier('modifier').out())
-        .be.equal('block block->>-modifier');
-
-      Bemmer.setModifierPrefix('*^q^*');
-
-      var bemmer = new Bemmer('block');
-
-      should(bemmer.modifier('modifier').out())
-        .be.equal('block block*^q^*modifier');
+      expect(classNames).to.contain('block__element__eelement');
+      expect(classNames).to.contain('block__element__eelement$#$#isModifier');
     });
   });
-})
+});

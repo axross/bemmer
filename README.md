@@ -1,7 +1,7 @@
 Bemmer
 ================================
 
-How do you write the `className` in the code? If your `className` is not a line, Bemmer is the solution.
+The solution for your fetid CSS class name definition.
 
 [![npm version](https://badge.fury.io/js/bemmer.svg)](http://badge.fury.io/js/bemmer)
 [![Build Status](https://drone.io/github.com/axross/bemmer/status.png)](https://drone.io/github.com/axross/bemmer/latest)
@@ -9,178 +9,104 @@ How do you write the `className` in the code? If your `className` is not a line,
 
 ## Example
 
-#### JSX :
+```javascript
+import bemmer from 'bemmer';
 
-```jsx
-import React  from 'react';
-import Bemmer from 'bemmer';
+const c = bemmer('className', 'otherClassName');
 
-export default React.createClass({
-  getInitialState() {
-    return { count: 0 };
-  },
+c('__element');
+// => "className__element otherClassName__element"
 
-  _onClick() {
-    this.setState({ this.state.count += 1 });
-  },
-
-  render() {
-    var bemmer = new Bemmer('counter', this.props.className);
-    var count  = this.state.count;
-
-    return (
-      <div className={className.getBlock()}>
-        <a
-          className={bemmer.el('button').mo('isOdd', count % 2 === 1)}
-          onClick={this._onClick}
-        >
-          {this.state.count}
-        </a>
-      </div>
-    );
-  },
-});
-```
-
-Bemmer can generate `className` that [React](http://facebook.github.io/react/) friendly that write only a line.
-
-#### Output :
-
-```html
-<div class="counter">
-  <a class="coutner__button counter__button--isOdd">3</a>
-</div>
+c('__element', { isModifier: true });
+// => "className__element--isModifier otherClassName__element--isModifier"
 ```
 
 ## Usage
 
-Requirement Node.js or Browser with [Browserify](http://browserify.org/) or [webpack](http://webpack.github.io/).
+Use [Browserify](http://browserify.org/) or [webpack](http://webpack.github.io/).
 
 ```sh
-$ npm install --save bemmer
+$ npm i -S bemmer
 ```
 
-#### <= ES5 :
+## Usage/APIs
+
+### bemmer(...block)
+
+Get a class name generator.
 
 ```js
-var Bemmer = require('bemmer');
+const c = bemmer('className');
+
+const c = bemmer('className', this.props.className);  // with React
 ```
 
-#### >= ES6 :
+It can receive the plural arguments. It expects the Block of BEM.
 
-```js
-import Bemmer from 'bemmer';
+```javascript
+const c = bemmer('className', 'otherClassName');
+
+c('__element');
+// => "className__element otherClassName__element"
+
+c('__element__otherElement');
+// => "className__element__otherElement otherClassName__element__otherElement"
 ```
 
-## API
+Class name generator is function. First argument expects the Element of BEM.
 
-### `new Bemmer(...classNames)`
+```javascript
+const c = bemmer('className');
 
-```js
-var bemmer = new Bemmer('myComponent');
+c('__element', { isModifier: true });
+// => "className__element className__element--isModifier"
 
-// can plural arguments
-var pluralBemmerA = new Bemmer('myComponent', this.props.classname);
-var pluralBemmerB = new Bemmer('myComponent yourComponent', 'hisComponent');
+const num = Math.floor(Math.random() * 100);
+
+c('__element', { isEven: num % 2 === 0 });
+// => "className__element className__element--isEven"
+// or only "className__element"
 ```
 
-Create a instance. Bemmer can take arguments that it is Block of the BEM.
+Second argument means the Modifier of BEM. It expects object. object's key means Modifier name and value means that is enable or not.
 
-#### `Bemmer#out()`
+### bemmer.setElementPrefix(prefix)
 
-```js
-var bemmer = new Bemmer('myComponent');
+Change Element prefix.
 
-bemmer.out();
-// => 'myComponent'
+```javascript
+bemmer.setElementPrefix('_-');
 
-bemmer.element('button').out();
-// => 'myComponent__button'
-```
+const c = bemmer('className');
 
-Generate `className`. If you called `.element()` or `.modifier()` before `.out()`, there are applied on the `out()`.
+c('__element');
+// => "className_-element"
 
-#### `Bemmer#element(elementName)`
-#### `Bemmer#el(elementName)`
-
-```js
-var bemmer = new Bemmer('myComponent', 'yourComponent');
-
-bemmer.element('button').out();
-bemmer.el('button').out();
-// => 'myComponent__button yourComponent__button'
-
-bemmer.element('button').element('label').out();
-bemmer.element('__button__label').out();
-// => 'myComponent__button__label yourComponent__button__label'
-```
-
-Set some Elements of BEM.
-
-#### `Bemmer#modifier(modifierName, isEnable)`
-#### `Bemmer#mo(modifierName, isEnable)`
-
-```js
-var bemmer = new Bemmer('myComponent');
-
-bemmer.element('button').modifier('isBlueColor').out();
-bemmer.el('button').mo('isBlueColor').out();
-// => 'myComponent__button myComponent__button--isBlueColor'
-
-bemmer.element('button').modifier('isDisable', xxx.length === 0).out();
-// => 'myComponent__button'
-// or 'myComponent__button myComponent__button--isDisable'
-```
-
-Set some Modifiers of BEM. `.modifier()` can take 2nd argument that it means applied.
-
-#### `Bemmer#getBlock()`
-
-```js
-var bemmer = new Bemmer('myComponent');
-
-bemmer.getBlock();
-// => 'myComponent'
-
-bemmer.element('button').getBlock();
-// => 'myComponent'
-
-var pluralBemmer = new Bemmer('myComponent', 'yourComponent hisComponent');
-
-pluralBemmer.getBlock();
-// => 'myComponent yourComponent hisComponent'
-```
-
-### `Bemmer.setElementPrefix(prefix)`
-
-Change element prefix.
-
-```js
-Bemmer.setElementPrefix('_');
-
-var bemmer = new Bemmer('block');
-
-bemmer.element('button').out();
-// => 'block_button'
-
-Bemmer.setModifierPrefix(Bemmer.DEFAULT_ELEMENT_PREFIX);
+bemmer.setModifierPrefix(bemmer.DEFAULT_ELEMENT_PREFIX);
 // Set default element prefix.
 ```
 
-### `Bemmer.setModifierPrefix(prefix)`
+### bemmer.setModifierPrefix(prefix)
 
-Change modifier prefix.
+Change Modifier prefix.
 
 ```js
-Bemmer.setModifierPrefix('-');
+bemmer.setElementPrefix('$$');
 
-var bemmer = new Bemmer('block');
+var c = bemmer('className');
 
-bemmer.modifier('isActive').out();
-// => 'block-isActive'
+c(null, { isModifier: true });
+// => "className className$$isModifier"
 
-Bemmer.setModifierPrefix(Bemmer.DEFAULT_MODIFIER_PREFIX);
+bemmer.setModifierPrefix(bemmer.DEFAULT_MODIFIER_PREFIX);
 // Set default modifier prefix.
+```
+
+## Tests
+
+```
+npm i
+npm test
 ```
 
 ## License
