@@ -18,7 +18,7 @@ c('__element');
 // => "className__element otherClassName__element"
 
 c('__element', { isModifier: true });
-// => "className__element--isModifier otherClassName__element--isModifier"
+// => "className__element otherClassName__element className__element--isModifier otherClassName__element--isModifier"
 ```
 
 ## Usage
@@ -82,8 +82,8 @@ const c = bemmer('className');
 c('__element');
 // => "className_-element"
 
-bemmer.setModifierPrefix(bemmer.DEFAULT_ELEMENT_PREFIX);
-// Set default element prefix.
+bemmer.setElementPrefix(bemmer.DEFAULT_ELEMENT_PREFIX);
+// Reset element prefix to default.
 ```
 
 ### bemmer.setModifierPrefix(prefix)
@@ -91,7 +91,7 @@ bemmer.setModifierPrefix(bemmer.DEFAULT_ELEMENT_PREFIX);
 Change Modifier prefix.
 
 ```js
-bemmer.setElementPrefix('$$');
+bemmer.setModifierPrefix('$$');
 
 var c = bemmer('className');
 
@@ -99,7 +99,7 @@ c(null, { isModifier: true });
 // => "className className$$isModifier"
 
 bemmer.setModifierPrefix(bemmer.DEFAULT_MODIFIER_PREFIX);
-// Set default modifier prefix.
+// Reset modifier prefix to default.
 ```
 
 ## Tests
