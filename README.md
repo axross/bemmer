@@ -33,15 +33,21 @@ $ npm i -S bemmer
 
 ### bemmer(...block)
 
-Get a class name generator.
+Get a class name maker.
 
 ```js
 const c = bemmer('className');
+// => generator
 
-const c = bemmer('className', this.props.className);  // with React
+const c = bemmer('className', this.props.className);
+// with React
 ```
 
 It can receive the plural arguments. It expects the Block of BEM.
+
+#### maker(elementsStr, modifiersObj)
+
+Get a class name string that attached elements and modifiers.
 
 ```javascript
 const c = bemmer('className', 'otherClassName');
@@ -53,7 +59,7 @@ c('__element__otherElement');
 // => "className__element__otherElement otherClassName__element__otherElement"
 ```
 
-Class name generator is function. First argument expects the Element of BEM.
+Class name maker is function. The first argument expects the Element of BEM.
 
 ```javascript
 const c = bemmer('className');
@@ -68,7 +74,20 @@ c('__element', { isEven: num % 2 === 0 });
 // or only "className__element"
 ```
 
-Second argument means the Modifier of BEM. It expects object. object's key means Modifier name and value means that is enable or not.
+The second argument means the Modifier of BEM. It expects object. object's key means Modifier name and value means that is enable or not.
+
+#### maker.set(elementsStr, modifiersObj)
+
+Get a new maker that attached elements and modifiers in advance.
+
+```javascript
+const c = bemmer('className');
+
+const setC = c.set('__element', { isModifier: true });
+
+c('__eelement');
+// => "className__element__eelement className__element__eelement--isModifier"
+```
 
 ### bemmer.setElementPrefix(prefix)
 
