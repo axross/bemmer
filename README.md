@@ -85,7 +85,7 @@ const c = bemmer('className');
 
 const setC = c.set('__element', { isModifier: true });
 
-c('__eelement');
+setC('__eelement');
 // => "className__element__eelement className__element__eelement--isModifier"
 ```
 
