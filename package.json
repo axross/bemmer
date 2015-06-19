@@ -1,6 +1,6 @@
 {
   "name": "bemmer",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "The solution for your fetid CSS class name definition.",
   "main": "./dist/bemmer.js",
   "scripts": {
