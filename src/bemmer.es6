@@ -10,10 +10,11 @@ class Bem {
   }
 
   append({ elements = [], modifiers = [] }) {
-    this.elements = this.elements.concat(elements);
-    this.modifiers = this.modifiers.concat(modifiers);
-
-    return this;
+    return new Bem({
+      block: this.block,
+      elements: this.elements.concat(elements),
+      modifiers: this.modifiers.concat(modifiers),
+    });
   }
 
   toString() {
@@ -41,33 +42,21 @@ class Bem {
   }
 }
 
-const extract = (regexp, string) => {
-  const result = regexp.exec(string);
-
-  return !!result ? Array.from(result).slice(1) : [];
-}
-
-const bemmer = (...classNames) => {
+const generateBuilder = (...classNames) => {
   const bems = classNames
     .filter(className => typeof className === 'string')
     .reduce((prev, className) => {
       return prev.concat(className.split(' '));
     }, [])
-    .filter(className => className.length >= 1)
+    .filter(className => className.length > 0)
     .map(className => Bem.fromClassName(className));
 
   const builder = (elements = '', modifiers = {}) => {
-    const sanitizedElements = elements.split('__')
-      .filter(element => element.length > 0);
-    const sanitizedModifiers = Object.keys(modifiers)
-      .filter(modifier => !!modifiers[modifier])
-      .filter(modifier => modifier.length > 0);
-
     return bems
       .map(bem => {
         return bem.append({
-          elements: sanitizedElements,
-          modifiers: sanitizedModifiers
+          elements: parseElements(elements),
+          modifiers: parseModifiers(modifiers)
         });
       })
       .map(bem => bem.toString())
@@ -77,7 +66,40 @@ const bemmer = (...classNames) => {
       .join(' ');
   };
 
+  builder.clone = (elements = '', modifiers = {}) => {
+    const attached = bems
+      .map(bem => {
+        return bem.append({
+          elements: parseElements(elements),
+          modifiers: parseModifiers(modifiers)
+        });
+      })
+      .map(bem => bem.toString())
+      .reduce((prev, className) => {
+        return prev.concat(prev.indexOf(className) > -1 ? [] : [className]);
+      }, []);
+
+    return bemmer()
+  };
+
   return builder;
 };
 
-export default bemmer;
+const extract = (regexp, string) => {
+  const result = regexp.exec(string);
+
+  return !!result ? Array.from(result).slice(1) : [];
+}
+
+const parseElements = (elements) => {
+  return elements.split('__')
+    .filter(element => element.length > 0);
+};
+
+const parseModifiers = (modifiers) => {
+  return Object.keys(modifiers)
+    .filter(modifier => !!modifiers[modifier])
+    .filter(modifier => modifier.length > 0);
+};
+
+export default generateBuilder;
