@@ -1,6 +1,6 @@
-const BLOCK_REGEXP    = /^([^_\-]+)/;
-const ELEMENT_REGEXP  = /__([^_\-]+)[^_]{2,}/g;
-const MODIFIER_REGEXP = /\-\-([^_\-]+)[^\-]{2,}/g;
+const BLOCK_REGEXP    = /^([^_\-\s]+)/g;
+const ELEMENT_REGEXP  = /__([^_\-\s]+)/g;
+const MODIFIER_REGEXP = /\-\-([^_\-\s]+)/g;
 
 class Bem {
   constructor({ block, elements, modifiers }) {
@@ -34,7 +34,7 @@ class Bem {
   }
 
   static fromClassName(className) {
-    const block = extract(BLOCK_REGEXP, className);
+    const block = extract(BLOCK_REGEXP, className)[0];
     const elements = extract(ELEMENT_REGEXP, className);
     const modifiers = extract(MODIFIER_REGEXP, className);
 
@@ -52,6 +52,13 @@ const generateBuilder = (...classNames) => {
     .map(className => Bem.fromClassName(className));
 
   const builder = (elements = '', modifiers = {}) => {
+    if (typeof elements !== 'string') {
+      throw new TypeError('elements expect a string.');
+    }
+    if (Object.prototype.toString.call(modifiers) !== '[object Object]') {
+      throw new TypeError('modifiers expect a plain object.');
+    }
+
     return bems
       .map(bem => {
         return bem.append({
@@ -67,28 +74,29 @@ const generateBuilder = (...classNames) => {
   };
 
   builder.clone = (elements = '', modifiers = {}) => {
-    const attached = bems
-      .map(bem => {
-        return bem.append({
-          elements: parseElements(elements),
-          modifiers: parseModifiers(modifiers)
-        });
-      })
-      .map(bem => bem.toString())
-      .reduce((prev, className) => {
-        return prev.concat(prev.indexOf(className) > -1 ? [] : [className]);
-      }, []);
+    const built = builder(elements, modifiers);
 
-    return bemmer()
+    return bemmer(built);
   };
+
+  builder.bems = bems;
 
   return builder;
 };
 
 const extract = (regexp, string) => {
-  const result = regexp.exec(string);
+  const clonedRegexp = new RegExp(regexp);
+  let extracted = [];
 
-  return !!result ? Array.from(result).slice(1) : [];
+  while (true) {
+    let result = clonedRegexp.exec(string);
+
+    if (result === null) break;
+
+    extracted.push(Array.from(result)[1]);
+  }
+
+  return extracted;
 }
 
 const parseElements = (elements) => {
