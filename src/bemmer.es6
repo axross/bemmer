@@ -51,12 +51,15 @@ const generateBuilder = (...classNames) => {
     .filter(className => className.length > 0)
     .map(className => Bem.fromClassName(className));
 
-  const builder = (elements = '', modifiers = {}) => {
+  const builder = (elements, modifiers) => {
+    elements = elements || '';
+    modifiers = modifiers || {};
+
     if (typeof elements !== 'string') {
-      throw new TypeError('elements expect a string.');
+      throw new TypeError('elements expect a string or null.');
     }
     if (Object.prototype.toString.call(modifiers) !== '[object Object]') {
-      throw new TypeError('modifiers expect a plain object.');
+      throw new TypeError('modifiers expect a plain object or null.');
     }
 
     return bems
@@ -93,7 +96,7 @@ const extract = (regexp, string) => {
 
     if (result === null) break;
 
-    extracted.push(Array.from(result)[1]);
+    extracted.push(result[1]);
   }
 
   return extracted;

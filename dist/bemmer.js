@@ -8,9 +8,9 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var BLOCK_REGEXP = /^([^_\-]+)/;
-var ELEMENT_REGEXP = /__([^_\-]+)[^_]{2,}/g;
-var MODIFIER_REGEXP = /\-\-([^_\-]+)[^\-]{2,}/g;
+var BLOCK_REGEXP = /^([^_\-\s]+)/g;
+var ELEMENT_REGEXP = /__([^_\-\s]+)/g;
+var MODIFIER_REGEXP = /\-\-([^_\-\s]+)/g;
 
 var Bem = (function () {
   function Bem(_ref) {
@@ -55,7 +55,7 @@ var Bem = (function () {
   }], [{
     key: 'fromClassName',
     value: function fromClassName(className) {
-      var block = extract(BLOCK_REGEXP, className);
+      var block = extract(BLOCK_REGEXP, className)[0];
       var elements = extract(ELEMENT_REGEXP, className);
       var modifiers = extract(MODIFIER_REGEXP, className);
 
@@ -81,9 +81,16 @@ var generateBuilder = function generateBuilder() {
     return Bem.fromClassName(className);
   });
 
-  var builder = function builder() {
-    var elements = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
-    var modifiers = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+  var builder = function builder(elements, modifiers) {
+    elements = elements || '';
+    modifiers = modifiers || {};
+
+    if (typeof elements !== 'string') {
+      throw new TypeError('elements expect a string or null.');
+    }
+    if (Object.prototype.toString.call(modifiers) !== '[object Object]') {
+      throw new TypeError('modifiers expect a plain object or null.');
+    }
 
     return bems.map(function (bem) {
       return bem.append({
@@ -112,9 +119,18 @@ var generateBuilder = function generateBuilder() {
 };
 
 var extract = function extract(regexp, string) {
-  var result = regexp.exec(string);
+  var clonedRegexp = new RegExp(regexp);
+  var extracted = [];
 
-  return !!result ? Array.from(result).slice(1) : [];
+  while (true) {
+    var result = clonedRegexp.exec(string);
+
+    if (result === null) break;
+
+    extracted.push(result[1]);
+  }
+
+  return extracted;
 };
 
 var parseElements = function parseElements(elements) {

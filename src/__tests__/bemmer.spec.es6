@@ -1,152 +1,343 @@
 import expect from 'expect.js';
 import bemmer from '../bemmer';
 
-describe('Bemmer', () => {
+describe('bemmer', () => {
   describe('bemmer()', () => {
-    it('can generate className with received elements and modifiers', () => {
-      const cn = bemmer('block');
-      const generated = cn('__element__eelement', {
-        isModifier: true,
-        isMmodifier: false,
+    it('should parse classNames', () => {
+      const testProps = [
+        {
+          args: ['block'],
+          expect: [
+            {
+              block: 'block',
+              elements: [],
+              modifier: [],
+            },
+          ],
+        },
+        {
+          args: ['block', 'blockk', 'blockkk'],
+          expect: [
+            {
+              block: 'block',
+              elements: [],
+              modifier: [],
+            },
+            {
+              block: 'blockk',
+              elements: [],
+              modifier: [],
+            },
+            {
+              block: 'blockkk',
+              elements: [],
+              modifier: [],
+            },
+          ]
+        },
+      ];
+
+      testProps.forEach((prop) => {
+        expect(bemmer(prop).bems).to.eql(prop.expect);
       });
-      const classNames = generated.split(' ');
-
-      expect(classNames).to.contain('block__element__eelement');
-      expect(classNames).to.contain('block__element__eelement--isModifier');
     });
-
-    it('can receive the plural classNames', () => {
-      const cn = bemmer('block', 'bblock');
-      const generated = cn('__element__eelement', {
-        isModifier: true,
-        isMmodifier: false,
-      });
-      const classNames = generated.split(' ');
-
-      expect(classNames).to.contain('block__element__eelement');
-      expect(classNames).to.contain('bblock__element__eelement');
-      expect(classNames).to.contain('block__element__eelement--isModifier');
-      expect(classNames).to.contain('bblock__element__eelement--isModifier');
-    });
-
-    it('should return plain className if it did not receive any arguments', () => {
-      const cn = bemmer('block', 'bblock');
-      const generated = cn();
-      const classNames = generated.split(' ');
-
-      expect(classNames).to.contain('block');
-      expect(classNames).to.contain('bblock');
-    });
-
-    it('should generate no-modifier-attached-className if it did not receive any modifiers', () => {
-      const cn = bemmer('block', 'bblock');
-      const generated = cn('__element__eelement');
-      const classNames = generated.split(' ');
-
-      expect(classNames).to.contain('block__element__eelement');
-      expect(classNames).to.contain('bblock__element__eelement');
-    });
-
-    it('should generate no-element-attached-className if it did not receive any elements', () => {
-      const cn = bemmer('block', 'bblock');
-      const generated = cn(null, {
-        isModifier: true,
-        isMmodifier: false,
-      });
-      const classNames = generated.split(' ');
-
-      expect(classNames).to.contain('block');
-      expect(classNames).to.contain('block--isModifier');
-      expect(classNames).to.contain('bblock');
-      expect(classNames).to.contain('bblock--isModifier');
-    });
+  //
+  //   it('should ignore no-string values', () => {
+  //     const testProps = [
+  //       {
+  //         args: ['block', null, undefined],
+  //         expect: {
+  //           block: 'block',
+  //           elements: [],
+  //           modifier: [],
+  //         },
+  //       },
+  //       {
+  //         args: ['block', 20, new Date(), 'blockk'],
+  //         expect: {
+  //           block: 'block blockk',
+  //           elements: [],
+  //           modifier: [],
+  //         },
+  //       },
+  //     ];
+  //   });
+  //
+  //   it('should ignore whitespaces', () => {
+  //
+  //   });
   });
-
-  describe('bemmer.set()', () => {
-    it('should return extended generate() function that includes received elements and modifiers', () => {
-      const cn = bemmer('block', 'bblock');
-      const fixed = cn.set('__element__eelement', {
-        isModifier: true,
-        isMmodifier: false,
-      });
-      const fixedClassNames = fixed().split(' ');
-
-      expect(fixedClassNames).to.contain(
-        'block__element__eelement'
-      );
-      expect(fixedClassNames).to.contain(
-        'bblock__element__eelement'
-      );
-      expect(fixedClassNames).to.contain(
-        'block__element__eelement--isModifier'
-      );
-      expect(fixedClassNames).to.contain(
-        'bblock__element__eelement--isModifier'
-      );
-
-      const extended = fixed('__eeelement', {
-        isMmmodifier: true,
-      });
-      const extendedClassNames = extended.split(' ');
-
-      expect(extendedClassNames).to.contain(
-        'block__element__eelement__eeelement'
-      );
-      expect(extendedClassNames).to.contain(
-        'bblock__element__eelement__eeelement'
-      );
-      expect(extendedClassNames).to.contain(
-        'block__element__eelement__eeelement--isModifier'
-      );
-      expect(extendedClassNames).to.contain(
-        'bblock__element__eelement__eeelement--isModifier'
-      );
-      expect(extendedClassNames).to.contain(
-        'block__element__eelement__eeelement--isMmmodifier'
-      );
-      expect(extendedClassNames).to.contain(
-        'bblock__element__eelement__eeelement--isMmmodifier'
-      );
-    });
-  });
-
-  describe('bemmer.setElementPrefix()', () => {
-    afterEach(() => {
-      bemmer.setElementPrefix(bemmer.DEFAULT_ELEMENT_PREFIX);
-    });
-
-    it('should set prefix of element that used when bemmer() ', () => {
-      bemmer.setElementPrefix('_-_-');
-
-      const cn = bemmer('block');
-      const generated = cn('__element__eelement', {
-        isModifier: true,
-        isMmodifier: false,
-      });
-      const classNames = generated.split(' ');
-
-      expect(classNames).to.contain('block_-_-element_-_-eelement');
-      expect(classNames).to.contain('block_-_-element_-_-eelement--isModifier');
-    });
-  });
-
-  describe('bemmer.setElementPrefix()', () => {
-    afterEach(() => {
-      bemmer.setModifierPrefix(bemmer.DEFAULT_MODIFIER_PREFIX);
-    });
-
-    it('should set prefix of element that used when bemmer() ', () => {
-      bemmer.setModifierPrefix('$#$#');
-
-      const cn = bemmer('block');
-      const generated = cn('__element__eelement', {
-        isModifier: true,
-        isMmodifier: false,
-      });
-      const classNames = generated.split(' ');
-
-      expect(classNames).to.contain('block__element__eelement');
-      expect(classNames).to.contain('block__element__eelement$#$#isModifier');
-    });
-  });
+  //
+  // describe('builder()', () => {
+  //   it('should building className', () => {
+  //     const testProps = [
+  //       {
+  //         bemmerArgs: ['block'],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable',
+  //       },
+  //       {
+  //         bemmerArgs: ['block', 'externalBlock', 'anotherBlock'],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable ' +
+  //                 'anotherBlock__element__childElement ' +
+  //                 'anotherBlock__element__childElement--isAvailable',
+  //       },
+  //       {
+  //         bemmerArgs: ['block', 'externalBlock', 'anotherBlock'],
+  //         builderArgs: ['__element__childElement', { isAvailable: true, ignoreMe: false }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable ' +
+  //                 'anotherBlock__element__childElement ' +
+  //                 'anotherBlock__element__childElement--isAvailable',
+  //       },
+  //     ];
+  //
+  //     testProps.forEach((prop) => {
+  //       const b = bemmer.apply(null, prop.bemmerArgs);
+  //       const className = b.apply(null, prop.builderArgs);
+  //
+  //       expect(className).to.eql(prop.expect);
+  //     });
+  //   });
+  //
+  //   it('should split arguments with whitespaces', () => {
+  //     const testProps = [
+  //       {
+  //         bemmerArgs: ['block', 'externalBlock anotherBlock'],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable ' +
+  //                 'anotherBlock__element__childElement ' +
+  //                 'anotherBlock__element__childElement--isAvailable',
+  //       },
+  //       {
+  //         bemmerArgs: ['block', 'exter nalBlock anoth erBlock'],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'exter__element__childElement ' +
+  //                 'exter__element__childElement--isAvailable ' +
+  //                 'nalBlock__element__childElement ' +
+  //                 'nalBlock__element__childElement--isAvailable ' +
+  //                 'anoth__element__childElement ' +
+  //                 'anoth__element__childElement--isAvailable ' +
+  //                 'erBlock__element__childElement ' +
+  //                 'erBlock__element__childElement--isAvailable',
+  //       },
+  //     ];
+  //
+  //     testProps.forEach((prop) => {
+  //       const b = bemmer.apply(null, prop.bemmerArgs);
+  //       const className = b.apply(null, prop.builderArgs);
+  //
+  //       expect(className).to.eql(prop.expect);
+  //     });
+  //   });
+  //
+  //   it('should ignore empty string arguments', () => {
+  //     const testProps = [
+  //       {
+  //         bemmerArgs: ['block', '   externalBlock anotherBlock'],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable ' +
+  //                 'anotherBlock__element__childElement ' +
+  //                 'anotherBlock__element__childElement--isAvailable',
+  //       },
+  //       {
+  //         bemmerArgs: ['block  ', '  externalBlock   anotherBlock     '],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable ' +
+  //                 'anotherBlock__element__childElement ' +
+  //                 'anotherBlock__element__childElement--isAvailable',
+  //       },
+  //       {
+  //         bemmerArgs: ['block  ', 'externalBlock', ' '],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable',
+  //       },
+  //       {
+  //         bemmerArgs: ['block  ', ' ', 'externalBlock', '     '],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable',
+  //       },
+  //     ];
+  //
+  //     testProps.forEach((prop) => {
+  //       const b = bemmer.apply(null, prop.bemmerArgs);
+  //       const className = b.apply(null, prop.builderArgs);
+  //
+  //       expect(className).to.eql(prop.expect);
+  //     });
+  //   });
+  //
+  //   it('should ignore no-string arguments', () => {
+  //     const testProps = [
+  //       {
+  //         bemmerArgs: ['block', undefined, 'externalBlock', null],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable',
+  //       },
+  //       {
+  //         bemmerArgs: ['block  ', '  externalBlock   anotherBlock     '],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable ' +
+  //                 'anotherBlock__element__childElement ' +
+  //                 'anotherBlock__element__childElement--isAvailable',
+  //       },
+  //       {
+  //         bemmerArgs: ['block  ', 'externalBlock', ' '],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable',
+  //       },
+  //       {
+  //         bemmerArgs: ['block  ', ' ', 'externalBlock', '     '],
+  //         builderArgs: ['__element__childElement', { isAvailable: true }],
+  //         expect: 'block__element__childElement ' +
+  //                 'block__element__childElement--isAvailable ' +
+  //                 'externalBlock__element__childElement ' +
+  //                 'externalBlock__element__childElement--isAvailable',
+  //       },
+  //     ];
+  //
+  //     testProps.forEach((prop) => {
+  //       const b = bemmer.apply(null, prop.bemmerArgs);
+  //       const className = b.apply(null, prop.builderArgs);
+  //
+  //       expect(className).to.eql(prop.expect);
+  //     });
+  //   });
+  // });
+  //
+  // // describe('bemmer()', () => {
+  // //   it('ignore no-string or empty-string arguments', () => {
+  // //     const testProps = [
+  // //       {
+  // //         args: ['block', 'externalBlock', 'anotherBlock'],
+  // //         expect: ['block', 'externalBlock', 'anotherBlock'],
+  // //       },
+  // //       {
+  // //         args: ['block', null, 'externalBlock', undefined],
+  // //         expect: ['block', 'externalBlock'],
+  // //       },
+  // //       {
+  // //         args: [23, new Date(), function() {}],
+  // //         expect: [],
+  // //       },
+  // //       {
+  // //         args: ['', ' ', '  '],
+  // //         expect: [],
+  // //       },
+  // //     ];
+  // //
+  // //     testProps.forEach((prop) => {
+  // //       const b = bemmer.apply(null, prop.args);
+  // //       const blocks = b.bems.map((bem) => bem.block);
+  // //
+  // //       expect(blocks).to.eql(prop.expect);
+  // //     });
+  // //   });
+  // //
+  // //   it('should split arguments with whitespaces', () => {
+  // //     const testProps = [
+  // //       {
+  // //         args: ['block', 'externalBlock anotherBlock', 'incomingBlock  lego'],
+  // //         expect: ['block', 'externalBlock', 'anotherBlock', 'incomingBlock', 'lego'],
+  // //       },
+  // //     ];
+  // //
+  // //     testProps.forEach((prop) => {
+  // //       const b = bemmer.apply(null, prop.args);
+  // //       const blocks = b.bems.map((bem) => bem.block);
+  // //
+  // //       expect(blocks).to.eql(prop.expect);
+  // //     });
+  // //   });
+  // //
+  // //   it('should parsing elements and modifiers of arguments', () => {
+  // //     const testProps = [
+  // //       {
+  // //         args: ['block', 'externalBlock__element', 'anotherBlock__element__grandson--isAvailable'],
+  // //         expect: [
+  // //           {
+  // //             block: 'block',
+  // //             elements: [],
+  // //             modifiers: [],
+  // //           },
+  // //           {
+  // //             block: 'externalBlock',
+  // //             elements: ['element'],
+  // //             modifiers: [],
+  // //           },
+  // //           {
+  // //             block: 'anotherBlock',
+  // //             elements: ['element', 'grandson'],
+  // //             modifiers: ['isAvailable'],
+  // //           },
+  // //         ],
+  // //       },
+  // //       {
+  // //         args: ['externalBlock__element', 'block anotherBlock__element__grandson--isAvailable'],
+  // //         expect: [
+  // //           {
+  // //             block: 'externalBlock',
+  // //             elements: ['element'],
+  // //             modifiers: [],
+  // //           },
+  // //           {
+  // //             block: 'block',
+  // //             elements: [],
+  // //             modifiers: [],
+  // //           },
+  // //           {
+  // //             block: 'anotherBlock',
+  // //             elements: ['element', 'grandson'],
+  // //             modifiers: ['isAvailable'],
+  // //           },
+  // //         ],
+  // //       },
+  // //     ];
+  // //
+  // //     testProps.forEach((prop) => {
+  // //       const b = bemmer.apply(null, prop.args);
+  // //
+  // //       expect(b.bems).to.eql(prop.expect);
+  // //     });
+  // //   });
+  // // });
+  // //
+  // // describe('build()', () => {
+  // //   it('should building classNames', () => {
+  // //
+  // //   });
+  // // });
 });
