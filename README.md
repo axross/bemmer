@@ -17,9 +17,9 @@ const builder = Bemmer.create('todoList', 'externalClassName');
 builder('__items');
 // => "todoList__items externalClassName__items"
 
-builder('__items__item', { isFinished: true });
-// => "todoList__items__item todoList__items__item--isFinished" +
-//    "externalClassName__items__item externalClassName__items__item--isFinished"
+builder('__items__item', { finished: true });
+// => "todoList__items__item todoList__items__item--finished" +
+//    "externalClassName__items__item externalClassName__items__item--finished"
 ```
 
 ### with React
@@ -47,8 +47,8 @@ const TodoListItem = React.createClass({
     const builder = Bemmer.create('todoListItem', this.props.className);
 
     return (
-      <li className={builder()}>
-        {this.props.item}
+      <li className={builder(null, { finished: this.props.item.finished })}>
+        {this.props.item.body}
       </li>
     );
   },
