@@ -1,6 +1,6 @@
 {
   "name": "bemmer",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "The solution for your fetid CSS class name definition.",
   "main": "./dist/bemmer.js",
   "scripts": {
@@ -15,7 +15,8 @@
   "keywords": [
     "react",
     "bem",
-    "classname"
+    "classname",
+    "css"
   ],
   "author": "axross",
   "license": "MIT",

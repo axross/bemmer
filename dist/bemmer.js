@@ -1,3 +1,7 @@
+//
+// Bemmer v0.3.0 by @axross
+// https://github.com/axross/bemmer
+//
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {

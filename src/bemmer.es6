@@ -1,3 +1,7 @@
+//
+// Bemmer v0.3.0 by @axross
+// https://github.com/axross/bemmer
+//
 const BLOCK_REGEXP    = /^([^_\-\s]+)/g;
 const ELEMENT_REGEXP  = /__([^_\-\s]+)/g;
 const MODIFIER_REGEXP = /\-\-([^_\-\s]+)/g;
