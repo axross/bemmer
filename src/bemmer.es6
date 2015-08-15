@@ -79,12 +79,6 @@ const generateBuilder = (...classNames) => {
       .join(' ');
   };
 
-  builder.clone = (elements = '', modifiers = {}) => {
-    const built = builder(elements, modifiers);
-
-    return bemmer(built);
-  };
-
   builder.bems = bems;
 
   return builder;
