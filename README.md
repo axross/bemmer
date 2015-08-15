@@ -10,122 +10,98 @@ The solution for your fetid CSS class name definition.
 ## Example
 
 ```javascript
-import bemmer from 'bemmer';
+import Bemmer from 'bemmer';
 
-const c = bemmer('className', 'otherClassName');
+const builder = Bemmer.create('todoList', 'externalClassName');
 
-c('__element');
-// => "className__element otherClassName__element"
+builder('__items');
+// => "todoList__items externalClassName__items"
 
-c('__element', { isModifier: true });
-// => "className__element otherClassName__element className__element--isModifier otherClassName__element--isModifier"
+builder('__items__item', { finished: true });
+// => "todoList__items__item todoList__items__item--finished" +
+//    "externalClassName__items__item externalClassName__items__item--finished"
+```
+
+### with React
+
+```javascript
+import Bemmer from 'bemmer';
+import React from 'react';
+
+const TodoList = React.createClass({
+  render() {
+    const builder = Bemmer.create('todoList', this.props.className);
+
+    return (
+      <div className={builder()}>
+        <ul className={builder('__items')}>
+          {this.props.items.map(item => <TodoListItem className={b('__items__item')} item={item} />)}
+        </ul>
+      </div>
+    );
+  },
+});
+
+const TodoListItem = React.createClass({
+  render() {
+    const builder = Bemmer.create('todoListItem', this.props.className);
+
+    return (
+      <li className={builder(null, { finished: this.props.item.finished })}>
+        {this.props.item.body}
+      </li>
+    );
+  },
+});
 ```
 
 ## Usage
 
-Use [Browserify](http://browserify.org/) or [webpack](http://webpack.github.io/).
+Use with [Browserify](http://browserify.org/) or [webpack](http://webpack.github.io/).
 
 ```sh
 $ npm i -S bemmer
 ```
 
-## Usage/APIs
-
-### bemmer(...block)
-
-Get a class name maker.
-
-```js
-const c = bemmer('className');
-// => generator
-
-const c = bemmer('className', this.props.className);
-// with React
+```
+import bemmer from 'bemmer';
 ```
 
-It can receive the plural arguments. It expects the Block of BEM.
+## API
 
-#### maker(elementsStr, modifiersObj)
+### Bemmer.create(className [, ...className])
 
-Get a class name string that attached elements and modifiers.
+Create "Class name builder".
 
 ```javascript
-const c = bemmer('className', 'otherClassName');
+Bemmer.create('todoList');
 
-c('__element');
-// => "className__element otherClassName__element"
+Bemmer.create('todoListItem', this.props.className);
 
-c('__element__otherElement');
-// => "className__element__otherElement otherClassName__element__otherElement"
+Bemmer.create('todoListItem todoListItem--finished');
 ```
 
-Class name maker is function. The first argument expects the Element of BEM.
+We called it `builder`.
+
+#### builder(elements, modifiers)
+
+Building class name. `builder()` returns a string separated with whitespace. See this:
 
 ```javascript
-const c = bemmer('className');
+const builder = Bemmer.create('aaa');
 
-c('__element', { isModifier: true });
-// => "className__element className__element--isModifier"
-
-const num = Math.floor(Math.random() * 100);
-
-c('__element', { isEven: num % 2 === 0 });
-// => "className__element className__element--isEven"
-// or only "className__element"
+builder('__bbb', { odd: this.props.id % 2 === 1 });
+// => "aaa__bbb" (and "aaa__bbb--odd" if id is odd)
 ```
-
-The second argument means the Modifier of BEM. It expects object. object's key means Modifier name and value means that is enable or not.
-
-#### maker.set(elementsStr, modifiersObj)
-
-Get a new maker that attached elements and modifiers in advance.
 
 ```javascript
-const c = bemmer('className');
+const builder = Bemmer.create('aaa', 'bbb__ccc');
 
-const setC = c.set('__element', { isModifier: true });
+builder('__ddd__eee', { fff: true });
+// => "aaa__ddd__eee aaa__ddd__eee--fff bbb__ccc__ddd__eee bbb__ccc__ddd__eee--fff"
 
-setC('__eelement');
-// => "className__element__eelement className__element__eelement--isModifier"
-```
-
-### bemmer.setElementPrefix(prefix)
-
-Change Element prefix.
-
-```javascript
-bemmer.setElementPrefix('_-');
-
-const c = bemmer('className');
-
-c('__element');
-// => "className_-element"
-
-bemmer.setElementPrefix(bemmer.DEFAULT_ELEMENT_PREFIX);
-// Reset element prefix to default.
-```
-
-### bemmer.setModifierPrefix(prefix)
-
-Change Modifier prefix.
-
-```js
-bemmer.setModifierPrefix('$$');
-
-var c = bemmer('className');
-
-c(null, { isModifier: true });
-// => "className className$$isModifier"
-
-bemmer.setModifierPrefix(bemmer.DEFAULT_MODIFIER_PREFIX);
-// Reset modifier prefix to default.
-```
-
-## Tests
-
-```
-npm i
-npm test
+builder();
+// => "aaa bbb__ccc"
 ```
 
 ## License

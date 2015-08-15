@@ -1,76 +1,117 @@
-const DEFAULT_ELEMENT_PREFIX  = '__';
-const DEFAULT_MODIFIER_PREFIX = '--';
-const SPLITTER_REGEXP         = /[\-\_\.\*\+\:\;\/]{2,}/g;
+const BLOCK_REGEXP    = /^([^_\-\s]+)/g;
+const ELEMENT_REGEXP  = /__([^_\-\s]+)/g;
+const MODIFIER_REGEXP = /\-\-([^_\-\s]+)/g;
 
-var elementPrefix  = DEFAULT_ELEMENT_PREFIX;
-var modifierPrefix = DEFAULT_MODIFIER_PREFIX;
+class Bem {
+  constructor({ block, elements, modifiers }) {
+    this.block = block;
+    this.elements = elements;
+    this.modifiers = modifiers;
+  }
 
-const extractElements = __whole => {
-  const whole = __whole || '';
+  append({ elements = [], modifiers = [] }) {
+    return new Bem({
+      block: this.block,
+      elements: this.elements.concat(elements),
+      modifiers: this.modifiers.concat(modifiers),
+    });
+  }
 
-  return whole.split(SPLITTER_REGEXP)
-    .filter(piece => piece.length >= 1);
-};
+  toString() {
+    const elementsAttached = this.elements
+      .reduce((prev, element) => {
+        return prev.concat(['__' + element]);
+      }, [this.block])
+      .join('');
 
-const extractModifiers = __pairs => {
-  const pairs = __pairs || {};
+    const modifiersAttached = this.modifiers
+      .reduce((prev, modifier) => {
+        return prev.concat([`${elementsAttached}--${modifier}`]);
+      }, [elementsAttached])
+      .join(' ');
 
-  return Object.keys(pairs)
-    .filter(key => pairs[key])
-    .map(key => key);
-};
+    return modifiersAttached;
+  }
 
-const attachElements = (classNames, elements) => {
-  if (elements.length === 0) return classNames;
+  static fromClassName(className) {
+    const block = extract(BLOCK_REGEXP, className)[0];
+    const elements = extract(ELEMENT_REGEXP, className);
+    const modifiers = extract(MODIFIER_REGEXP, className);
 
-  return classNames
-    .map(cn => cn + elementPrefix + elements.join(elementPrefix));
-};
+    return new Bem({ block, elements, modifiers });
+  }
+}
 
-const attachModifiers = (classNames, modifiers) => {
-  const attached = classNames
-    .map(cn => {
-      return modifiers
-        .map(mo => cn + modifierPrefix + mo);
-    })
-    .reduce((prev, curr) => prev.concat(curr))
+const generateBuilder = (...classNames) => {
+  const bems = classNames
+    .filter(className => typeof className === 'string')
+    .reduce((prev, className) => {
+      return prev.concat(className.split(' '));
+    }, [])
+    .filter(className => className.length > 0)
+    .map(className => Bem.fromClassName(className))
 
-  return classNames.concat(attached);
-};
+  const builder = (elements, modifiers) => {
+    elements = elements || '';
+    modifiers = modifiers || {};
 
-const bemmer = (...classNames) => {
-  var fixedElements  = [];
-  var fixedModifiers = [];
+    if (typeof elements !== 'string') {
+      throw new TypeError('elements expect a string or null.');
+    }
+    if (Object.prototype.toString.call(modifiers) !== '[object Object]') {
+      throw new TypeError('modifiers expect a plain object or null.');
+    }
 
-  const generator = (elementWhole, modifierPairs) => {
-    const elements  = fixedElements.concat(extractElements(elementWhole));
-    const modifiers = fixedModifiers.concat(extractModifiers(modifierPairs));
-
-    const elementsAttached  = attachElements(classNames, elements);
-    const modifiersAttached = attachModifiers(elementsAttached, modifiers);
-
-    return modifiersAttached.join(' ');
+    return bems
+      .map(bem => {
+        return bem.append({
+          elements: parseElements(elements),
+          modifiers: parseModifiers(modifiers)
+        });
+      })
+      .map(bem => bem.toString())
+      .reduce((prev, className) => {
+        return prev.concat(className.split(' '));
+      }, [])
+      .reduce((prev, className) => {
+        return prev.concat(prev.indexOf(className) > -1 ? [] : [className]);
+      }, [])
+      .join(' ');
   };
 
-  generator.set = (elementWhole, modifierPairs) => {
-    fixedElements  = fixedElements.concat(extractElements(elementWhole));
-    fixedModifiers = fixedModifiers.concat(extractModifiers(modifierPairs));
+  builder.bems = bems;
 
-    return generator;
-  };
-
-  return generator;
+  return builder;
 };
 
-bemmer.setElementPrefix = prefix => {
-  elementPrefix = prefix;
+const extract = (regexp, string) => {
+  const clonedRegexp = new RegExp(regexp);
+  let extracted = [];
+
+  while (true) {
+    let result = clonedRegexp.exec(string);
+
+    if (result === null) break;
+
+    extracted.push(result[1]);
+  }
+
+  return extracted;
+}
+
+const parseElements = (elements) => {
+  return elements.split('__')
+    .filter(element => element.length > 0);
 };
 
-bemmer.setModifierPrefix = prefix => {
-  modifierPrefix = prefix;
+const parseModifiers = (modifiers) => {
+  return Object.keys(modifiers)
+    .filter(modifier => !!modifiers[modifier])
+    .filter(modifier => modifier.length > 0);
 };
 
-bemmer.DEFAULT_ELEMENT_PREFIX  = DEFAULT_ELEMENT_PREFIX;
-bemmer.DEFAULT_MODIFIER_PREFIX = DEFAULT_MODIFIER_PREFIX;
+const Bemmer = {
+  create: generateBuilder,
+};
 
-export default bemmer;
+export default Bemmer;
