@@ -140,5 +140,9 @@ var parseModifiers = function parseModifiers(modifiers) {
   });
 };
 
-exports['default'] = generateBuilder;
+var Bemmer = {
+  create: generateBuilder
+};
+
+exports['default'] = Bemmer;
 module.exports = exports['default'];

@@ -110,4 +110,8 @@ const parseModifiers = (modifiers) => {
     .filter(modifier => modifier.length > 0);
 };
 
-export default generateBuilder;
+const Bemmer = {
+  create: generateBuilder,
+};
+
+export default Bemmer;
