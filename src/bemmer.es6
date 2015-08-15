@@ -49,7 +49,7 @@ const generateBuilder = (...classNames) => {
       return prev.concat(className.split(' '));
     }, [])
     .filter(className => className.length > 0)
-    .map(className => Bem.fromClassName(className));
+    .map(className => Bem.fromClassName(className))
 
   const builder = (elements, modifiers) => {
     elements = elements || '';
@@ -70,6 +70,9 @@ const generateBuilder = (...classNames) => {
         });
       })
       .map(bem => bem.toString())
+      .reduce((prev, className) => {
+        return prev.concat(className.split(' '));
+      }, [])
       .reduce((prev, className) => {
         return prev.concat(prev.indexOf(className) > -1 ? [] : [className]);
       }, [])

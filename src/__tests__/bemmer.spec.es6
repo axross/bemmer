@@ -3,341 +3,67 @@ import bemmer from '../bemmer';
 
 describe('bemmer', () => {
   describe('bemmer()', () => {
-    it('should parse classNames', () => {
-      const testProps = [
-        {
-          args: ['block'],
-          expect: [
-            {
-              block: 'block',
-              elements: [],
-              modifier: [],
-            },
-          ],
-        },
-        {
-          args: ['block', 'blockk', 'blockkk'],
-          expect: [
-            {
-              block: 'block',
-              elements: [],
-              modifier: [],
-            },
-            {
-              block: 'blockk',
-              elements: [],
-              modifier: [],
-            },
-            {
-              block: 'blockkk',
-              elements: [],
-              modifier: [],
-            },
-          ]
-        },
+    const testArgsOfBuilder = [
+      ['__zzz', { yyy: true }],
+      ['__zzz__yyy', { xxx: true, www: false }],
+      [null, { zzz: true }],
+      ['__zzz', null],
+    ];
+
+    it('#1', () => {
+      const b = bemmer('aaa');
+      const expects = [
+        'aaa__zzz aaa__zzz--yyy',
+        'aaa__zzz__yyy aaa__zzz__yyy--xxx',
+        'aaa aaa--zzz',
+        'aaa__zzz',
       ];
 
-      testProps.forEach((prop) => {
-        expect(bemmer(prop).bems).to.eql(prop.expect);
+      testArgsOfBuilder.forEach((args, i) => {
+        expect(b(...args)).to.be(expects[i]);
       });
     });
-  //
-  //   it('should ignore no-string values', () => {
-  //     const testProps = [
-  //       {
-  //         args: ['block', null, undefined],
-  //         expect: {
-  //           block: 'block',
-  //           elements: [],
-  //           modifier: [],
-  //         },
-  //       },
-  //       {
-  //         args: ['block', 20, new Date(), 'blockk'],
-  //         expect: {
-  //           block: 'block blockk',
-  //           elements: [],
-  //           modifier: [],
-  //         },
-  //       },
-  //     ];
-  //   });
-  //
-  //   it('should ignore whitespaces', () => {
-  //
-  //   });
+
+    it('#2', () => {
+      const b = bemmer('aaa__bbb--ccc');
+      const expects = [
+        'aaa__bbb__zzz aaa__bbb__zzz--ccc aaa__bbb__zzz--yyy',
+        'aaa__bbb__zzz__yyy aaa__bbb__zzz__yyy--ccc aaa__bbb__zzz__yyy--xxx',
+        'aaa__bbb aaa__bbb--ccc aaa__bbb--zzz',
+        'aaa__bbb__zzz aaa__bbb__zzz--ccc',
+      ];
+
+      testArgsOfBuilder.forEach((args, i) => {
+        expect(b(...args)).to.be(expects[i]);
+      });
+    });
+
+    it('#3', () => {
+      const b = bemmer('aaa__bbb ccc');
+      const expects = [
+        'aaa__bbb__zzz aaa__bbb__zzz--yyy ccc__zzz ccc__zzz--yyy',
+        'aaa__bbb__zzz__yyy aaa__bbb__zzz__yyy--xxx ccc__zzz__yyy ccc__zzz__yyy--xxx',
+        'aaa__bbb aaa__bbb--zzz ccc ccc--zzz',
+        'aaa__bbb__zzz ccc__zzz',
+      ];
+
+      testArgsOfBuilder.forEach((args, i) => {
+        expect(b(...args)).to.be(expects[i]);
+      });
+    });
+
+    it('#4', () => {
+      const b = bemmer('aaa__bbb aaa__bbb--ccc ddd ddd--ccc');
+      const expects = [
+        'aaa__bbb__zzz aaa__bbb__zzz--yyy aaa__bbb__zzz--ccc ddd__zzz ddd__zzz--yyy ddd__zzz--ccc',
+        'aaa__bbb__zzz__yyy aaa__bbb__zzz__yyy--xxx aaa__bbb__zzz__yyy--ccc ddd__zzz__yyy ddd__zzz__yyy--xxx ddd__zzz__yyy--ccc',
+        'aaa__bbb aaa__bbb--zzz aaa__bbb--ccc ddd ddd--zzz ddd--ccc',
+        'aaa__bbb__zzz aaa__bbb__zzz--ccc ddd__zzz ddd__zzz--ccc',
+      ];
+
+      testArgsOfBuilder.forEach((args, i) => {
+        expect(b(...args)).to.be(expects[i]);
+      });
+    });
   });
-  //
-  // describe('builder()', () => {
-  //   it('should building className', () => {
-  //     const testProps = [
-  //       {
-  //         bemmerArgs: ['block'],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable',
-  //       },
-  //       {
-  //         bemmerArgs: ['block', 'externalBlock', 'anotherBlock'],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable ' +
-  //                 'anotherBlock__element__childElement ' +
-  //                 'anotherBlock__element__childElement--isAvailable',
-  //       },
-  //       {
-  //         bemmerArgs: ['block', 'externalBlock', 'anotherBlock'],
-  //         builderArgs: ['__element__childElement', { isAvailable: true, ignoreMe: false }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable ' +
-  //                 'anotherBlock__element__childElement ' +
-  //                 'anotherBlock__element__childElement--isAvailable',
-  //       },
-  //     ];
-  //
-  //     testProps.forEach((prop) => {
-  //       const b = bemmer.apply(null, prop.bemmerArgs);
-  //       const className = b.apply(null, prop.builderArgs);
-  //
-  //       expect(className).to.eql(prop.expect);
-  //     });
-  //   });
-  //
-  //   it('should split arguments with whitespaces', () => {
-  //     const testProps = [
-  //       {
-  //         bemmerArgs: ['block', 'externalBlock anotherBlock'],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable ' +
-  //                 'anotherBlock__element__childElement ' +
-  //                 'anotherBlock__element__childElement--isAvailable',
-  //       },
-  //       {
-  //         bemmerArgs: ['block', 'exter nalBlock anoth erBlock'],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'exter__element__childElement ' +
-  //                 'exter__element__childElement--isAvailable ' +
-  //                 'nalBlock__element__childElement ' +
-  //                 'nalBlock__element__childElement--isAvailable ' +
-  //                 'anoth__element__childElement ' +
-  //                 'anoth__element__childElement--isAvailable ' +
-  //                 'erBlock__element__childElement ' +
-  //                 'erBlock__element__childElement--isAvailable',
-  //       },
-  //     ];
-  //
-  //     testProps.forEach((prop) => {
-  //       const b = bemmer.apply(null, prop.bemmerArgs);
-  //       const className = b.apply(null, prop.builderArgs);
-  //
-  //       expect(className).to.eql(prop.expect);
-  //     });
-  //   });
-  //
-  //   it('should ignore empty string arguments', () => {
-  //     const testProps = [
-  //       {
-  //         bemmerArgs: ['block', '   externalBlock anotherBlock'],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable ' +
-  //                 'anotherBlock__element__childElement ' +
-  //                 'anotherBlock__element__childElement--isAvailable',
-  //       },
-  //       {
-  //         bemmerArgs: ['block  ', '  externalBlock   anotherBlock     '],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable ' +
-  //                 'anotherBlock__element__childElement ' +
-  //                 'anotherBlock__element__childElement--isAvailable',
-  //       },
-  //       {
-  //         bemmerArgs: ['block  ', 'externalBlock', ' '],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable',
-  //       },
-  //       {
-  //         bemmerArgs: ['block  ', ' ', 'externalBlock', '     '],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable',
-  //       },
-  //     ];
-  //
-  //     testProps.forEach((prop) => {
-  //       const b = bemmer.apply(null, prop.bemmerArgs);
-  //       const className = b.apply(null, prop.builderArgs);
-  //
-  //       expect(className).to.eql(prop.expect);
-  //     });
-  //   });
-  //
-  //   it('should ignore no-string arguments', () => {
-  //     const testProps = [
-  //       {
-  //         bemmerArgs: ['block', undefined, 'externalBlock', null],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable',
-  //       },
-  //       {
-  //         bemmerArgs: ['block  ', '  externalBlock   anotherBlock     '],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable ' +
-  //                 'anotherBlock__element__childElement ' +
-  //                 'anotherBlock__element__childElement--isAvailable',
-  //       },
-  //       {
-  //         bemmerArgs: ['block  ', 'externalBlock', ' '],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable',
-  //       },
-  //       {
-  //         bemmerArgs: ['block  ', ' ', 'externalBlock', '     '],
-  //         builderArgs: ['__element__childElement', { isAvailable: true }],
-  //         expect: 'block__element__childElement ' +
-  //                 'block__element__childElement--isAvailable ' +
-  //                 'externalBlock__element__childElement ' +
-  //                 'externalBlock__element__childElement--isAvailable',
-  //       },
-  //     ];
-  //
-  //     testProps.forEach((prop) => {
-  //       const b = bemmer.apply(null, prop.bemmerArgs);
-  //       const className = b.apply(null, prop.builderArgs);
-  //
-  //       expect(className).to.eql(prop.expect);
-  //     });
-  //   });
-  // });
-  //
-  // // describe('bemmer()', () => {
-  // //   it('ignore no-string or empty-string arguments', () => {
-  // //     const testProps = [
-  // //       {
-  // //         args: ['block', 'externalBlock', 'anotherBlock'],
-  // //         expect: ['block', 'externalBlock', 'anotherBlock'],
-  // //       },
-  // //       {
-  // //         args: ['block', null, 'externalBlock', undefined],
-  // //         expect: ['block', 'externalBlock'],
-  // //       },
-  // //       {
-  // //         args: [23, new Date(), function() {}],
-  // //         expect: [],
-  // //       },
-  // //       {
-  // //         args: ['', ' ', '  '],
-  // //         expect: [],
-  // //       },
-  // //     ];
-  // //
-  // //     testProps.forEach((prop) => {
-  // //       const b = bemmer.apply(null, prop.args);
-  // //       const blocks = b.bems.map((bem) => bem.block);
-  // //
-  // //       expect(blocks).to.eql(prop.expect);
-  // //     });
-  // //   });
-  // //
-  // //   it('should split arguments with whitespaces', () => {
-  // //     const testProps = [
-  // //       {
-  // //         args: ['block', 'externalBlock anotherBlock', 'incomingBlock  lego'],
-  // //         expect: ['block', 'externalBlock', 'anotherBlock', 'incomingBlock', 'lego'],
-  // //       },
-  // //     ];
-  // //
-  // //     testProps.forEach((prop) => {
-  // //       const b = bemmer.apply(null, prop.args);
-  // //       const blocks = b.bems.map((bem) => bem.block);
-  // //
-  // //       expect(blocks).to.eql(prop.expect);
-  // //     });
-  // //   });
-  // //
-  // //   it('should parsing elements and modifiers of arguments', () => {
-  // //     const testProps = [
-  // //       {
-  // //         args: ['block', 'externalBlock__element', 'anotherBlock__element__grandson--isAvailable'],
-  // //         expect: [
-  // //           {
-  // //             block: 'block',
-  // //             elements: [],
-  // //             modifiers: [],
-  // //           },
-  // //           {
-  // //             block: 'externalBlock',
-  // //             elements: ['element'],
-  // //             modifiers: [],
-  // //           },
-  // //           {
-  // //             block: 'anotherBlock',
-  // //             elements: ['element', 'grandson'],
-  // //             modifiers: ['isAvailable'],
-  // //           },
-  // //         ],
-  // //       },
-  // //       {
-  // //         args: ['externalBlock__element', 'block anotherBlock__element__grandson--isAvailable'],
-  // //         expect: [
-  // //           {
-  // //             block: 'externalBlock',
-  // //             elements: ['element'],
-  // //             modifiers: [],
-  // //           },
-  // //           {
-  // //             block: 'block',
-  // //             elements: [],
-  // //             modifiers: [],
-  // //           },
-  // //           {
-  // //             block: 'anotherBlock',
-  // //             elements: ['element', 'grandson'],
-  // //             modifiers: ['isAvailable'],
-  // //           },
-  // //         ],
-  // //       },
-  // //     ];
-  // //
-  // //     testProps.forEach((prop) => {
-  // //       const b = bemmer.apply(null, prop.args);
-  // //
-  // //       expect(b.bems).to.eql(prop.expect);
-  // //     });
-  // //   });
-  // // });
-  // //
-  // // describe('build()', () => {
-  // //   it('should building classNames', () => {
-  // //
-  // //   });
-  // // });
 });
