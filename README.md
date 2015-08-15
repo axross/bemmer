@@ -5,7 +5,7 @@ The solution for your fetid CSS class name definition.
 
 [![npm version](https://badge.fury.io/js/bemmer.svg)](http://badge.fury.io/js/bemmer)
 [![Build Status](https://drone.io/github.com/axross/bemmer/status.png)](https://drone.io/github.com/axross/bemmer/latest)
-![license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)
+[![license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
 
 ## Example
 
