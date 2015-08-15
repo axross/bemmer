@@ -106,15 +106,6 @@ var generateBuilder = function generateBuilder() {
     }, []).join(' ');
   };
 
-  builder.clone = function () {
-    var elements = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
-    var modifiers = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-    var built = builder(elements, modifiers);
-
-    return bemmer(built);
-  };
-
   builder.bems = bems;
 
   return builder;
