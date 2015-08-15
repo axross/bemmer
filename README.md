@@ -1,4 +1,4 @@
-bemmer
+Bemmer
 ================================
 
 The solution for your fetid CSS class name definition.
@@ -10,44 +10,45 @@ The solution for your fetid CSS class name definition.
 ## Example
 
 ```javascript
-import bemmer from 'bemmer';
+import Bemmer from 'bemmer';
 
-const c = bemmer('todoList', 'externalClassName');
+const builder = Bemmer.create('todoList', 'externalClassName');
 
-c('__items');
+builder('__items');
 // => "todoList__items externalClassName__items"
 
-c('__items__item', { isFinished: true });
-// => "todoList__items__item--isFinished externalClassName__items__item--isFinished"
+builder('__items__item', { isFinished: true });
+// => "todoList__items__item todoList__items__item--isFinished" +
+//    "externalClassName__items__item externalClassName__items__item--isFinished"
 ```
 
 ### with React
 
 ```javascript
-import bemmer from 'bemmer';
+import Bemmer from 'bemmer';
 import React from 'react';
 
-const c = bemmer('todoList');
-
 const TodoList = React.createClass({
-  propTypes: {
-    items: React.PropTypes.arrayOf(React.PropTypes.string),
-  },
-
   render() {
+    const builder = Bemmer.create('todoList', this.props.className);
+
     return (
-      <div className={c()}>
-        <ul className={c('__items')}>
-          {this.props.items.map(item => this.renderItem(item))}
+      <div className={builder()}>
+        <ul className={builder('__items')}>
+          {this.props.items.map(item => <TodoListItem className={b('__items__item')} item={item} />)}
         </ul>
       </div>
     );
   },
+});
 
-  renderItem(item) {
+const TodoListItem = React.createClass({
+  render() {
+    const builder = Bemmer.create('todoListItem', this.props.className);
+
     return (
-      <li className={c('__items__item')}>
-        {item}
+      <li className={builder()}>
+        {this.props.item}
       </li>
     );
   },
@@ -68,9 +69,40 @@ import bemmer from 'bemmer';
 
 ## API
 
-### bemmer(...classNames)
+### Bemmer.create(className [, ...className])
 
-### builder
+Create "Class name builder".
+
+```javascript
+Bemmer.create('todoList');
+
+Bemmer.create('todoListItem', this.props.className);
+
+Bemmer.create('todoListItem todoListItem--finished');
+```
+
+We called it `builder`.
+
+#### builder(elements, modifiers)
+
+Building class name. `builder()` returns a string separated with whitespace. See this:
+
+```javascript
+const builder = Bemmer.create('aaa');
+
+builder('__bbb', { odd: this.props.id % 2 === 1 });
+// => "aaa__bbb" (and "aaa__bbb--odd" if id is odd)
+```
+
+```javascript
+const builder = Bemmer.create('aaa', 'bbb__ccc');
+
+builder('__ddd__eee', { fff: true });
+// => "aaa__ddd__eee aaa__ddd__eee--fff bbb__ccc__ddd__eee bbb__ccc__ddd__eee--fff"
+
+builder();
+// => "aaa bbb__ccc"
+```
 
 ## License
 
