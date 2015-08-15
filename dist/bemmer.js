@@ -100,6 +100,8 @@ var generateBuilder = function generateBuilder() {
     }).map(function (bem) {
       return bem.toString();
     }).reduce(function (prev, className) {
+      return prev.concat(className.split(' '));
+    }, []).reduce(function (prev, className) {
       return prev.concat(prev.indexOf(className) > -1 ? [] : [className]);
     }, []).join(' ');
   };
