@@ -1,5 +1,5 @@
 //
-// Bemmer v0.3.0 by @axross
+// Bemmer v0.3.1 by @axross
 // https://github.com/axross/bemmer
 //
 'use strict';
