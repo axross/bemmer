@@ -1,7 +1,7 @@
 Bemmer
 ================================
 
-The solution for your fetid CSS class name definition.
+[BEM](https://en.bem.info/)-like simple classname builder.
 
 [![npm version](https://badge.fury.io/js/bemmer.svg)](http://badge.fury.io/js/bemmer)
 [![Build Status](https://drone.io/github.com/axross/bemmer/status.png)](https://drone.io/github.com/axross/bemmer/latest)

@@ -1,7 +1,7 @@
 {
   "name": "bemmer",
-  "version": "0.3.0",
-  "description": "The solution for your fetid CSS class name definition.",
+  "version": "0.3.1",
+  "description": "BEM-like simple classname builder.",
   "main": "./dist/bemmer.js",
   "scripts": {
     "build": "babel src/bemmer.es6 -o ./dist/bemmer.js",
