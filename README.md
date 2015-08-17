@@ -35,7 +35,7 @@ const TodoList = React.createClass({
     return (
       <div className={builder()}>
         <ul className={builder('__items')}>
-          {this.props.items.map(item => <TodoListItem className={b('__items__item')} item={item} />)}
+          {this.props.items.map(item => <TodoListItem className={builder('__items__item')} item={item} />)}
         </ul>
       </div>
     );
