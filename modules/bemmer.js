@@ -12,7 +12,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var BLOCK_REGEXP = /^([^_\-\s]+)/g;
 var ELEMENT_REGEXP = /__([^_\-\s]+)/g;
 var MODIFIER_REGEXP = /\-\-([^_\-\s]+)/g;
 
@@ -59,9 +58,9 @@ var Bem = (function () {
   }], [{
     key: 'fromClassName',
     value: function fromClassName(className) {
-      var block = extract(BLOCK_REGEXP, className)[0];
-      var elements = extract(ELEMENT_REGEXP, className);
-      var modifiers = extract(MODIFIER_REGEXP, className);
+      var block = __extractBlock(className);
+      var elements = __extract(ELEMENT_REGEXP, className);
+      var modifiers = __extract(MODIFIER_REGEXP, className);
 
       return new Bem({ block: block, elements: elements, modifiers: modifiers });
     }
@@ -98,8 +97,8 @@ var generateBuilder = function generateBuilder() {
 
     return bems.map(function (bem) {
       return bem.append({
-        elements: parseElements(elements),
-        modifiers: parseModifiers(modifiers)
+        elements: __parseElements(elements),
+        modifiers: __parseModifiers(modifiers)
       });
     }).map(function (bem) {
       return bem.toString();
@@ -115,7 +114,17 @@ var generateBuilder = function generateBuilder() {
   return builder;
 };
 
-var extract = function extract(regexp, string) {
+var __extractBlock = function __extractBlock(value) {
+  var block = value.split('__')[0].split('--')[0];
+
+  if (value === '') {
+    throw new Error('Invalid className given');
+  }
+
+  return block;
+};
+
+var __extract = function __extract(regexp, string) {
   var clonedRegexp = new RegExp(regexp);
   var extracted = [];
 
@@ -130,13 +139,13 @@ var extract = function extract(regexp, string) {
   return extracted;
 };
 
-var parseElements = function parseElements(elements) {
+var __parseElements = function __parseElements(elements) {
   return elements.split('__').filter(function (element) {
     return element.length > 0;
   });
 };
 
-var parseModifiers = function parseModifiers(modifiers) {
+var __parseModifiers = function __parseModifiers(modifiers) {
   return Object.keys(modifiers).filter(function (modifier) {
     return !!modifiers[modifier];
   }).filter(function (modifier) {
