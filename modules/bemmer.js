@@ -1,6 +1,6 @@
 //
-// Bemmer v0.3.1 by @axross
-// https://github.com/axross/bemmer
+// Bemmer v0.3.2 by @axross
+// feel free to post Issues and Pull Requests: https://github.com/axross/bemmer
 //
 'use strict';
 

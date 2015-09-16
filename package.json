@@ -1,6 +1,6 @@
 {
   "name": "bemmer",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "BEM-like simple classname builder.",
   "main": "./modules/bemmer.js",
   "scripts": {
