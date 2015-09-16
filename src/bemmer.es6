@@ -2,7 +2,6 @@
 // Bemmer v0.3.1 by @axross
 // https://github.com/axross/bemmer
 //
-const BLOCK_REGEXP    = /^([^_\-\s]+)/g;
 const ELEMENT_REGEXP  = /__([^_\-\s]+)/g;
 const MODIFIER_REGEXP = /\-\-([^_\-\s]+)/g;
 
@@ -38,9 +37,9 @@ class Bem {
   }
 
   static fromClassName(className) {
-    const block = extract(BLOCK_REGEXP, className)[0];
-    const elements = extract(ELEMENT_REGEXP, className);
-    const modifiers = extract(MODIFIER_REGEXP, className);
+    const block = __extractBlock(className);
+    const elements = __extract(ELEMENT_REGEXP, className);
+    const modifiers = __extract(MODIFIER_REGEXP, className);
 
     return new Bem({ block, elements, modifiers });
   }
@@ -69,8 +68,8 @@ const generateBuilder = (...classNames) => {
     return bems
       .map(bem => {
         return bem.append({
-          elements: parseElements(elements),
-          modifiers: parseModifiers(modifiers)
+          elements: __parseElements(elements),
+          modifiers: __parseModifiers(modifiers)
         });
       })
       .map(bem => bem.toString())
@@ -88,7 +87,17 @@ const generateBuilder = (...classNames) => {
   return builder;
 };
 
-const extract = (regexp, string) => {
+const __extractBlock = value => {
+  const block = value.split('__')[0].split('--')[0];
+
+  if (value === '') {
+    throw new Error('Invalid className given');
+  }
+
+  return block;
+};
+
+const __extract = (regexp, string) => {
   const clonedRegexp = new RegExp(regexp);
   let extracted = [];
 
@@ -103,12 +112,12 @@ const extract = (regexp, string) => {
   return extracted;
 }
 
-const parseElements = (elements) => {
+const __parseElements = (elements) => {
   return elements.split('__')
     .filter(element => element.length > 0);
 };
 
-const parseModifiers = (modifiers) => {
+const __parseModifiers = (modifiers) => {
   return Object.keys(modifiers)
     .filter(modifier => !!modifiers[modifier])
     .filter(modifier => modifier.length > 0);
