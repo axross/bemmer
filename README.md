@@ -4,7 +4,8 @@ Bemmer
 [BEM](https://en.bem.info/)-like simple classname builder.
 
 [![npm version](https://badge.fury.io/js/bemmer.svg)](http://badge.fury.io/js/bemmer)
-[![Build Status](https://drone.io/github.com/axross/bemmer/status.png)](https://drone.io/github.com/axross/bemmer/latest)
+[![Circle CI](https://circleci.com/gh/axross/bemmer/tree/master.svg?style=svg&circle-token=456c6ed1164374fa5fc15e20e20be41ebefddbe6)](https://circleci.com/gh/axross/bemmer/tree/stable)
+[![Circle CI](https://circleci.com/gh/axross/bemmer/tree/master.svg?style=svg&circle-token=456c6ed1164374fa5fc15e20e20be41ebefddbe6)](https://circleci.com/gh/axross/bemmer/tree/master)
 [![license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
 
 ## Example
