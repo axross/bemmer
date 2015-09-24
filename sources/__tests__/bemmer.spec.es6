@@ -5,8 +5,8 @@ describe('Bemmer.create()', () => {
   const testArgsOfBuilder = [
     ['__zzz', { yyy: true }],
     ['__zzz__yyy', { xxx: true, www: false }],
-    [null, { zzz: true }],
-    ['__zzz', null],
+    ['', { zzz: true }],
+    ['__zzz'],
     ['__zzz_yyy', { xxx: true }],
     ['__zz!z$&y@yy', { xxx: true }],
   ];
