@@ -84,7 +84,7 @@ Bemmer.create('todoListItem todoListItem--finished');
 
 We called it `builder`.
 
-#### builder(elements, modifiers)
+#### builder(elements : string, modifiers : object)
 
 Building class name. `builder()` returns a string separated with whitespace. See this:
 
@@ -103,6 +103,9 @@ builder('__ddd__eee', { fff: true });
 
 builder();
 // => "aaa bbb__ccc"
+
+builder('', { ddd: true });
+// => "aaa bbb__ccc aaa--ddd bbb__ccc--ddd"
 ```
 
 ## License
