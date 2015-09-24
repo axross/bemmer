@@ -84,15 +84,14 @@ var generateBuilder = function generateBuilder() {
     return Bem.fromClassName(className);
   });
 
-  var builder = function builder(elements, modifiers) {
-    elements = elements || '';
-    modifiers = modifiers || {};
+  var builder = function builder(elements) {
+    var modifiers = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     if (typeof elements !== 'string') {
-      throw new TypeError('elements expect a string or null.');
+      throw new TypeError('elements must be a String');
     }
     if (Object.prototype.toString.call(modifiers) !== '[object Object]') {
-      throw new TypeError('modifiers expect a plain object or null.');
+      throw new TypeError('modifiers must be a plain Object or undefined.');
     }
 
     return bems.map(function (bem) {
