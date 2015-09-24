@@ -70,7 +70,7 @@ import bemmer from 'bemmer';
 
 ## API
 
-### Bemmer.create(className [, ...className])
+### Bemmer.create(className : string [, ...className : string])
 
 Create "Class name builder".
 
