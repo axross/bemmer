@@ -54,15 +54,12 @@ const generateBuilder = (...classNames) => {
     .filter(className => className.length > 0)
     .map(className => Bem.fromClassName(className))
 
-  const builder = (elements, modifiers) => {
-    elements = elements || '';
-    modifiers = modifiers || {};
-
+  const builder = (elements, modifiers = {}) => {
     if (typeof elements !== 'string') {
-      throw new TypeError('elements expect a string or null.');
+      throw new TypeError('elements must be a String');
     }
     if (Object.prototype.toString.call(modifiers) !== '[object Object]') {
-      throw new TypeError('modifiers expect a plain object or null.');
+      throw new TypeError('modifiers must be a plain Object or undefined.');
     }
 
     return bems
