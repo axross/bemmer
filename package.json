@@ -2,9 +2,9 @@
   "name": "bemmer",
   "version": "0.3.2",
   "description": "BEM-like simple classname builder.",
-  "main": "./modules/bemmer.js",
+  "main": "./distributions/bemmer.js",
   "scripts": {
-    "build": "babel sources/bemmer.es6 -o ./modules/bemmer.js",
+    "babel": "babel sources/bemmer.es6 -o ./distributions/bemmer.js",
     "test": "mocha --colors --growl --compilers es6:babel/register --ui bdd --reporter spec ./sources/**/__tests__/**/*.spec.*",
     "prepublish": "npm run build"
   },
