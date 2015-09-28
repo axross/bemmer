@@ -1,5 +1,5 @@
 import expect from 'expect.js';
-import Bemmer from '../bemmer';
+import Bemmer from '../sources/bemmer';
 
 describe('Bemmer.create()', () => {
   const testArgsOfBuilder = [
@@ -9,6 +9,7 @@ describe('Bemmer.create()', () => {
     ['__zzz'],
     ['__zzz_yyy', { xxx: true }],
     ['__zz!z$&y@yy', { xxx: true }],
+    []
   ];
 
   it('#1', () => {
@@ -20,6 +21,7 @@ describe('Bemmer.create()', () => {
       'aaa__zzz',
       'aaa__zzz_yyy aaa__zzz_yyy--xxx',
       'aaa__zz!z$&y@yy aaa__zz!z$&y@yy--xxx',
+      'aaa'
     ];
 
     testArgsOfBuilder.forEach((args, i) => {
@@ -36,6 +38,7 @@ describe('Bemmer.create()', () => {
       'aaa__bbb__zzz aaa__bbb__zzz--ccc',
       'aaa__bbb__zzz_yyy aaa__bbb__zzz_yyy--ccc aaa__bbb__zzz_yyy--xxx',
       'aaa__bbb__zz!z$&y@yy aaa__bbb__zz!z$&y@yy--ccc aaa__bbb__zz!z$&y@yy--xxx',
+      'aaa__bbb aaa__bbb--ccc'
     ];
 
     testArgsOfBuilder.forEach((args, i) => {
@@ -52,6 +55,7 @@ describe('Bemmer.create()', () => {
       'aaa__bbb__zzz ccc__zzz',
       'aaa__bbb__zzz_yyy aaa__bbb__zzz_yyy--xxx ccc__zzz_yyy ccc__zzz_yyy--xxx',
       'aaa__bbb__zz!z$&y@yy aaa__bbb__zz!z$&y@yy--xxx ccc__zz!z$&y@yy ccc__zz!z$&y@yy--xxx',
+      'aaa__bbb ccc'
     ];
 
     testArgsOfBuilder.forEach((args, i) => {
@@ -68,6 +72,7 @@ describe('Bemmer.create()', () => {
       'aaa__bbb__zzz aaa__bbb__zzz--ccc ddd__zzz ddd__zzz--ccc',
       'aaa__bbb__zzz_yyy aaa__bbb__zzz_yyy--xxx aaa__bbb__zzz_yyy--ccc ddd__zzz_yyy ddd__zzz_yyy--xxx ddd__zzz_yyy--ccc',
       'aaa__bbb__zz!z$&y@yy aaa__bbb__zz!z$&y@yy--xxx aaa__bbb__zz!z$&y@yy--ccc ddd__zz!z$&y@yy ddd__zz!z$&y@yy--xxx ddd__zz!z$&y@yy--ccc',
+      'aaa__bbb aaa__bbb--ccc ddd ddd--ccc'
     ];
 
     testArgsOfBuilder.forEach((args, i) => {
