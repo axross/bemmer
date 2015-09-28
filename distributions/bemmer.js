@@ -1,7 +1,3 @@
-//
-// Bemmer v0.4.0 by @axross
-// feel free to post Issues and Pull Requests: https://github.com/axross/bemmer
-//
 'use strict';
 
 Object.defineProperty(exports, '__esModule', {
@@ -84,7 +80,8 @@ var generateBuilder = function generateBuilder() {
     return Bem.fromClassName(className);
   });
 
-  var builder = function builder(elements) {
+  var builder = function builder() {
+    var elements = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
     var modifiers = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
 
     if (typeof elements !== 'string') {
