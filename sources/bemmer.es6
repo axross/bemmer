@@ -54,7 +54,7 @@ const generateBuilder = (...classNames) => {
     .filter(className => className.length > 0)
     .map(className => Bem.fromClassName(className))
 
-  const builder = (elements, modifiers = {}) => {
+  const builder = (elements = '', modifiers = {}) => {
     if (typeof elements !== 'string') {
       throw new TypeError('elements must be a String');
     }
