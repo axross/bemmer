@@ -12,7 +12,7 @@ describe('Bemmer.create()', () => {
     []
   ];
 
-  it('#1', () => {
+  describe('#1', () => {
     const b = Bemmer.create('aaa');
     const expects = [
       'aaa__zzz aaa__zzz--yyy',
@@ -25,7 +25,9 @@ describe('Bemmer.create()', () => {
     ];
 
     testArgsOfBuilder.forEach((args, i) => {
-      expect(b(...args)).to.be(expects[i]);
+      it(`when ${expects[i]}`, () => {
+        expect(b(...args)).to.be(expects[i]);
+      });
     });
   });
 
