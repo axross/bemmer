@@ -1,17 +1,17 @@
 'use strict';
 
-Object.defineProperty(exports, '__esModule', {
+Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ELEMENT_REGEXP = /__([^_\-\s]+)/g;
 var MODIFIER_REGEXP = /\-\-([^_\-\s]+)/g;
 
-var Bem = (function () {
+var Bem = function () {
   function Bem(_ref) {
     var block = _ref.block;
     var elements = _ref.elements;
@@ -63,7 +63,7 @@ var Bem = (function () {
   }]);
 
   return Bem;
-})();
+}();
 
 var generateBuilder = function generateBuilder() {
   for (var _len = arguments.length, classNames = Array(_len), _key = 0; _key < _len; _key++) {
@@ -153,5 +153,4 @@ var Bemmer = {
   create: generateBuilder
 };
 
-exports['default'] = Bemmer;
-module.exports = exports['default'];
+exports.default = Bemmer;
