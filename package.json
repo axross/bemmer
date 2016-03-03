@@ -5,8 +5,7 @@
   "main": "./distributions/bemmer.js",
   "scripts": {
     "babel": "babel ./sources/bemmer.es6 -o ./distributions/bemmer.js",
-    "test": "mocha --colors --compilers es6:babel/register --ui bdd --reporter spec ./tests/**/*.spec.*",
-    "prepublish": "npm run babel"
+    "test": "ava './tests/**/*.test.js'"
   },
   "repository": {
     "type": "git",
