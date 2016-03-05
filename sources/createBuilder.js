@@ -34,11 +34,6 @@ const createBuilder = (...initialClassNames) => {
 
     return initialBems
       .map(bem => {
-        console.log(new Bem(Object.assign({}, bem, {
-          elements,
-          modifiers,
-        })));
-
         return new Bem(Object.assign({}, bem, {
           elements,
           modifiers,
