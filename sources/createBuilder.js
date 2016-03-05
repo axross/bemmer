@@ -35,11 +35,11 @@ const createBuilder = (...initialClassNames) => {
     return initialBems
       .map(bem => {
         return new Bem(Object.assign({}, bem, {
-          elements,
-          modifiers,
+          elements: bem.elements.concat(elements),
+          modifiers: bem.modifiers.concat(modifiers),
         })).toString();
       })
-      .reduce((whole, cn) => cn.split(' '), [])
+      .reduce((whole, cn) => whole.concat(cn.split(' ')), [])
       .reduce((whole, cn) => {
         return whole.concat(whole.indexOf(cn) !== -1 ? [] : [cn]);
       }, [])
