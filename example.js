@@ -1,6 +1,6 @@
-var Bemmer = require('./dist/bemmer');
+const bemmer = require('./sources/index');
 
-var builder = Bemmer.create('todoList', 'externalClassName');
+const builder = bemmer.createBuilder('todoList', 'externalClassName');
 
 console.log(builder('__items'));
 // => "todoList__items externalClassName__items"
