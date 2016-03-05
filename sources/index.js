@@ -6,4 +6,7 @@ module.exports = {
   Bem,
   createBuilder,
   isBuilder,
+
+  // alias
+  builder: createBuilder,
 };
