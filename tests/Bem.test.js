@@ -1,3 +1,6 @@
+// require hook
+require('babel-register');
+
 const test = require('ava');
 const { Bem } = require('../sources');
 

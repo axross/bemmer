@@ -5,7 +5,7 @@
   "main": "./distributions/bemmer.js",
   "scripts": {
     "babel": "babel ./sources --out-dir ./distributions",
-    "test": "ava -r babel-register './tests/**/*.test.js'"
+    "test": "ava './tests/**/*.test.js'"
   },
   "repository": {
     "type": "git",
