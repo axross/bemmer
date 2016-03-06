@@ -1,5 +1,4 @@
-bemmer
-================================
+# bemmer
 
 [`bemmer`](https://github.com/axross/bemmer) is a [BEM](https://en.bem.info/)-like simple classname builder.
 
@@ -89,7 +88,13 @@ const TodoList = React.createClass({
     const listItems = this.props.listItems.map((listItem, i) => {
       return (
         <li className={b('item', { odd: i % 2 === 1 })}>
-          {listItem}
+          <span className={b('item__title')}>
+            {listItem.title}
+          </span>
+
+          <span className={b('item__createdAt')}>
+            {listItem.createdAt}
+          </span>
         </li>
       );
     });
@@ -106,17 +111,35 @@ const TodoList = React.createClass({
 ##### Result:
 
 ```html
-<ul className="todoList classNameFromProps">
-  <li className="todoList__item todoList__item--odd classNameFromProps__item classNameFromProps__item--odd">
-    aaa
+<ul class="todoList classNameFromProps">
+  <li class="todoList__item todoList__item--odd classNameFromProps__item classNameFromProps__item--odd">
+    <span class="todoList__item__title classNameFromProps__item__title">
+      v1.0.0
+    </span>
+
+    <span class="todoList__item__createdAt classNameFromProps__item__createdAt">
+      2016-03-06
+    </span>
   </li>
 
-  <li className="todoList__item todoList__item--odd classNameFromProps__item classNameFromProps__item--odd">
-    bbb
+  <li class="todoList__item todoList__item--odd classNameFromProps__item classNameFromProps__item--odd">
+    <span class="todoList__item__title classNameFromProps__item__title">
+      v0.4.1
+    </span>
+
+    <span class="todoList__item__createdAt classNameFromProps__item__createdAt">
+      2015-09-28
+    </span>
   </li>
 
-  <li className="todoList__item todoList__item--odd classNameFromProps__item classNameFromProps__item--odd">
-    ccc
+  <li class="todoList__item todoList__item--odd classNameFromProps__item classNameFromProps__item--odd">
+    <span class="todoList__item__title classNameFromProps__item__title">
+      v0.3.2
+    </span>
+
+    <span class="todoList__item__createdAt classNameFromProps__item__createdAt">
+      2015-09-16
+    </span>
   </li>
 </ul>
 ```
