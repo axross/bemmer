@@ -42,6 +42,9 @@ const bemmer = require('bemmer');
 
 ## API
 
+- [bemmer.createBuilder](#bemmercreatebuilder)
+- [builder](#builder)
+
 ### bemmer.createBuilder
 
 ```
