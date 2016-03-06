@@ -1,8 +1,5 @@
-// require hook
-require('babel-register');
-
 const test = require('ava');
-const bemmer = require('../sources');
+const bemmer = require('../distributions');
 
 const TEST_INPUTS = [
   ['__zzz', { yyy: true }],
