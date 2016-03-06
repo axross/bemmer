@@ -1,4 +1,8 @@
 const test = require('ava');
+
+// require hook
+require('babel-register');
+
 const bemmer = require('../sources');
 
 const TEST_INPUTS = [
