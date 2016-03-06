@@ -3,9 +3,11 @@ const createBuilder = require('./createBuilder');
 const isBuilder = require('./createBuilder');
 
 module.exports = {
-  Bem,
   createBuilder,
   isBuilder,
+
+  // undocumented
+  Bem,
 
   // alias
   builder: createBuilder,
