@@ -7,7 +7,7 @@ bemmer
 [![Circle CI](https://circleci.com/gh/axross/bemmer/tree/master.svg?style=svg&circle-token=456c6ed1164374fa5fc15e20e20be41ebefddbe6)](https://circleci.com/gh/axross/bemmer/tree/master)
 [![license](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
 
-<img src="logo.png" alt="bemmer" width="640">
+<img src="logo.jpg" alt="bemmer" width="640">
 
 ## Example
 
