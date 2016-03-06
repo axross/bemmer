@@ -6,10 +6,10 @@ var isBuilder = require('./createBuilder');
 
 module.exports = {
   createBuilder: createBuilder,
-  isBuilder: isBuilder,
 
   // undocumented
   Bem: Bem,
+  isBuilder: isBuilder,
 
   // alias
   builder: createBuilder

@@ -1,5 +1,7 @@
 'use strict';
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var invariant = require('invariant');
 var Bem = require('./Bem');
 
@@ -47,7 +49,7 @@ var createBuilder = function createBuilder() {
     });
 
     return initialBems.map(function (bem) {
-      return new Bem(Object.assign({}, bem, {
+      return new Bem(_extends({}, bem, {
         elements: bem.elements.concat(elements),
         modifiers: bem.modifiers.concat(modifiers)
       })).toString();
