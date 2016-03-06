@@ -13,7 +13,7 @@
 ```javascript
 const bemmer = require('bemmer');
 
-const builder = Bemmer.createBuilder('todoList', 'externalClassName');
+const builder = Bemmer.create('todoList', 'externalClassName');
 
 builder('__items');
 // => "todoList__items externalClassName__items"
@@ -41,25 +41,25 @@ const bemmer = require('bemmer');
 
 ## API
 
-- [bemmer.createBuilder](#bemmercreatebuilder)
+- [bemmer.create](#bemmercreatebuilder)
 - [builder](#builder)
 
-### bemmer.createBuilder
+### bemmer.create
 
 ```
-createBuilder(classname: string [... classname: string]): function
+create(classname: string [... classname: string]): function
 ```
 
 Create a Builder function.
 
 ```javascript
-const builder = Bemmer.createBuilder('todoList');
+const builder = Bemmer.create('todoList');
 
 // can plural arguments, use with React
-const builder = Bemmer.createBuilder('todoList', this.props.className);
+const builder = Bemmer.create('todoList', this.props.className);
 
 // parse a BEM-like full classname
-const builder = Bemmer.createBuilder('todoList__item--finished');
+const builder = Bemmer.create('todoList__item--finished');
 ```
 
 ### builder
@@ -71,7 +71,7 @@ builder([elements :string [, modifiers :object]]): string
 Build a BEM-like full classname. When result are plural class name, It joined with whitespace. (ex. `todoList__item externalClassName__item`)
 
 ```javascript
-const builder = Bemmer.createBuilder('todoList', 'main__todoList');
+const builder = Bemmer.create('todoList', 'main__todoList');
 
 builder('__item', { odd: true });
 // => "todoList__item todoList__item--odd main__todoList__item main__todoList__item--odd"
@@ -84,7 +84,7 @@ builder('__item', { odd: true });
 ```javascript
 const TodoList = React.createClass({
   render() {
-    const b = Bemmer.createBuilder('todoList', this.props.className);
+    const b = Bemmer.create('todoList', this.props.className);
     const listItems = this.props.listItems.map((listItem, i) => {
       return (
         <li className={b('item', { odd: i % 2 === 1 })}>
@@ -122,7 +122,7 @@ const TodoList = React.createClass({
     </span>
   </li>
 
-  <li class="todoList__item todoList__item--odd classNameFromProps__item classNameFromProps__item--odd">
+  <li class="todoList__item classNameFromProps__item">
     <span class="todoList__item__title classNameFromProps__item__title">
       v0.4.1
     </span>
