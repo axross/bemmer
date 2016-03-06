@@ -23,13 +23,18 @@ const createBuilder = (...initialClassNames) => {
       'expects modifiersObj is a plain object'
     );
     invariant(
-      Object.keys(modifiersObj).indexOf('') === -1,
-      'do not contains blank string key ("") in modifiersObj'
+      /^[_a-zA-Z0-9-]*$/.test(elementsStr),
+      'expects elementsStr is a valid string (via. /^[_a-zA-Z0-9-]*$/)'
+    );
+    invariant(
+      Object.keys(modifiersObj).every(key => /^[_a-zA-Z0-9-]*$/.test(key)),
+      'expects keys of modifiersObj are each of a valid string (via. /^[_a-zA-Z0-9-]*$/)'
     );
 
     const elements = elementsStr.split('__')
       .filter(element => element.length >= 1);
     const modifiers = Object.keys(modifiersObj)
+      .filter(key => key.length >= 1)
       .filter(key => !!modifiersObj[key]);
 
     return initialBems

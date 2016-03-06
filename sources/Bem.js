@@ -81,5 +81,3 @@ class Bem {
 }
 
 module.exports = Bem;
-
-// console.log(Bem.fromFullClassName('aaa__bbb__zzz__yyy--xxx--xxx'));
