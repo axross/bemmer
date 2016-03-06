@@ -4,7 +4,7 @@
   "description": "BEM-like simple classname builder.",
   "main": "./distributions/bemmer.js",
   "scripts": {
-    "babel": "babel ./sources/bemmer.es6 -o ./distributions/bemmer.js",
+    "babel": "babel ./sources --out-dir ./distributions",
     "test": "ava -r babel-register './tests/**/*.test.js'"
   },
   "repository": {
