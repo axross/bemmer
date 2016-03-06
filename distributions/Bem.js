@@ -22,12 +22,12 @@ var Bem = function () {
     invariant(Array.isArray(modifiers) && modifiers.every(function (mo) {
       return typeof mo === 'string';
     }), 'expects modifiers is an array of strings');
-    invariant(!block.includes('__') && !block.includes('--'), 'expects block does not include "__" or "--"');
+    invariant(block.indexOf('__') === -1 && block.indexOf('--') === -1, 'expects block does not include "__" or "--"');
     invariant(elements.every(function (el) {
-      return !el.includes('__') && !el.includes('--');
+      return el.indexOf('__') === -1 && el.indexOf('--') === -1;
     }), 'expects an item of elements does not include "__" or "--"');
     invariant(modifiers.every(function (mo) {
-      return !mo.includes('__') && !mo.includes('--');
+      return mo.indexOf('__') === -1 && mo.indexOf('--') === -1;
     }), 'expects an item of modifiers does not include "__" or "--"');
 
     this.block = block;
@@ -61,8 +61,8 @@ var Bem = function () {
         parts.reduce(function (whole, matched) {
           return whole.indexOf(matched) === -1 ? whole.concat([matched]) : whole;
         }, []).forEach(function (matched) {
-          if (matched.startsWith('__')) elements.push(matched.substr(2));
-          if (matched.startsWith('--')) modifiers.push(matched.substr(2));
+          if (matched.slice(0, 2) === '__') elements.push(matched.substr(2));
+          if (matched.slice(0, 2) === '--') modifiers.push(matched.substr(2));
         });
       }
 
