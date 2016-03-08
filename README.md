@@ -148,6 +148,22 @@ const TodoList = React.createClass({
 </ul>
 ```
 
+##### CSS (less) Example:
+
+```less
+.todoList
+  &__item
+    // ...
+    &--odd
+      //...
+    &__title
+      // ...
+    &__createdAt
+      // ...
+```
+
+It is so simple! 👏
+
 ## License
 
 MIT
