@@ -64,6 +64,8 @@ const builder = bemmer.createBuilder('todoList', this.props.className);
 const builder = bemmer.createBuilder('todoList__item--finished');
 ```
 
+Alias: `bemmer.create` (not recommended)
+
 ### builder
 
 ```
