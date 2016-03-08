@@ -1,4 +1,4 @@
-const bemmer = require('./sources/index');
+const bemmer = require('./distributions');
 
 const builder = bemmer.createBuilder('todoList', 'externalClassName');
 

@@ -8,12 +8,14 @@
 
 <img src="logo.jpg" alt="bemmer" width="640">
 
+If you taking pains by handling CSS selector (such as classnames), Try the BEM with with Component oriented design using React. `bemmer` helps it. [See Example with React](#use-with-react).
+
 ## Example
 
 ```javascript
 const bemmer = require('bemmer');
 
-const builder = Bemmer.create('todoList', 'externalClassName');
+const builder = bemmer.createBuilder('todoList', 'externalClassName');
 
 builder('__items');
 // => "todoList__items externalClassName__items"
@@ -41,25 +43,25 @@ const bemmer = require('bemmer');
 
 ## API
 
-- [bemmer.create](#bemmercreatebuilder)
+- [bemmer.createBuilder](#bemmercreatebuilder)
 - [builder](#builder)
 
-### bemmer.create
+### bemmer.createBuilder
 
 ```
 create(classname: string [... classname: string]): function
 ```
 
-Create a Builder function.
+Create a [`builder`](#builder) function.
 
 ```javascript
-const builder = Bemmer.create('todoList');
+const builder = bemmer.createBuilder('todoList');
 
 // can plural arguments, use with React
-const builder = Bemmer.create('todoList', this.props.className);
+const builder = bemmer.createBuilder('todoList', this.props.className);
 
 // parse a BEM-like full classname
-const builder = Bemmer.create('todoList__item--finished');
+const builder = bemmer.createBuilder('todoList__item--finished');
 ```
 
 ### builder
@@ -71,7 +73,7 @@ builder([elements :string [, modifiers :object]]): string
 Build a BEM-like full classname. When result are plural class name, It joined with whitespace. (ex. `todoList__item externalClassName__item`)
 
 ```javascript
-const builder = Bemmer.create('todoList', 'main__todoList');
+const builder = bemmer.createBuilder('todoList', 'main__todoList');
 
 builder('__item', { odd: true });
 // => "todoList__item todoList__item--odd main__todoList__item main__todoList__item--odd"
@@ -84,7 +86,7 @@ builder('__item', { odd: true });
 ```javascript
 const TodoList = React.createClass({
   render() {
-    const b = Bemmer.create('todoList', this.props.className);
+    const b = bemmer.createBuilder('todoList', this.props.className);
     const listItems = this.props.listItems.map((listItem, i) => {
       return (
         <li className={b('item', { odd: i % 2 === 1 })}>
@@ -118,7 +120,7 @@ const TodoList = React.createClass({
     </span>
 
     <span class="todoList__item__createdAt classNameFromProps__item__createdAt">
-      2016-03-06
+      2016-03-08
     </span>
   </li>
 

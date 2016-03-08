@@ -2,7 +2,7 @@
   "name": "bemmer",
   "version": "0.4.1",
   "description": "BEM-like simple classname builder.",
-  "main": "./distributions/bemmer.js",
+  "main": "./distributions/index.js",
   "scripts": {
     "babel": "babel ./sources --out-dir ./distributions",
     "test": "ava './tests/**/*.test.js' -t | tap-diff"
