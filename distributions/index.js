@@ -1,14 +1,12 @@
 'use strict';
 
-var Bem = require('./Bem');
 var createBuilder = require('./createBuilder');
-var isBuilder = require('./createBuilder');
+var isBuilder = require('./isBuilder');
 
 module.exports = {
   createBuilder: createBuilder,
 
   // undocumented
-  Bem: Bem,
   isBuilder: isBuilder,
 
   // alias

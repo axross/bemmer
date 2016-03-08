@@ -39,12 +39,10 @@ const createBuilder = (...initialClassNames) => {
       .filter(key => !!modifiersObj[key]);
 
     return initialBems
-      .map(bem => {
-        return new Bem(Object.assign({}, bem, {
-          elements: bem.elements.concat(elements),
-          modifiers: bem.modifiers.concat(modifiers),
-        })).toString();
-      })
+      .map(bem => new Bem(Object.assign({}, bem, {
+        elements: bem.elements.concat(elements),
+        modifiers: bem.modifiers.concat(modifiers),
+      })).toString())
       .reduce((whole, cn) => whole.concat(cn.split(' ')), [])
       .reduce((whole, cn) => {
         return whole.concat(whole.indexOf(cn) === -1 ? [cn] : []);
@@ -53,6 +51,7 @@ const createBuilder = (...initialClassNames) => {
   };
 
   builder.__SYMBOL = __SYMBOL;
+  builder.initialBems = initialBems;
 
   return builder;
 };

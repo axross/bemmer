@@ -6,6 +6,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var invariant = require('invariant');
 
+var _require = require('./util');
+
+var includes = _require.includes;
+var startsWith = _require.startsWith;
+
 var Bem = function () {
   function Bem(params) {
     _classCallCheck(this, Bem);
@@ -59,10 +64,11 @@ var Bem = function () {
 
       if (Array.isArray(parts)) {
         parts.reduce(function (whole, matched) {
-          return whole.indexOf(matched) === -1 ? whole.concat([matched]) : whole;
+          return includes(whole, matched) ? whole : whole.concat([matched]);
         }, []).forEach(function (matched) {
-          if (matched.slice(0, 2) === '__') elements.push(matched.substr(2));
-          if (matched.slice(0, 2) === '--') modifiers.push(matched.substr(2));
+          /* eslint no-magic-numbers: 0 */
+          if (startsWith(matched, '__')) elements.push(matched.substr(2));
+          if (startsWith(matched, '--')) modifiers.push(matched.substr(2));
         });
       }
 

@@ -37,7 +37,7 @@ var createBuilder = function createBuilder() {
     invariant(Object.keys(modifiersObj).every(function (key) {
       return (/^[_a-zA-Z0-9-]*$/.test(key)
       );
-    }), 'expects keys of modifiersObj are each of a valid string (via. /^[_a-zA-Z0-9-]*$/)');
+    }), 'expects keys of modifiersObj are each of a valid string ' + '(via. /^[_a-zA-Z0-9-]*$/)');
 
     var elements = elementsStr.split('__').filter(function (element) {
       return element.length >= 1;
@@ -56,11 +56,12 @@ var createBuilder = function createBuilder() {
     }).reduce(function (whole, cn) {
       return whole.concat(cn.split(' '));
     }, []).reduce(function (whole, cn) {
-      return whole.concat(whole.indexOf(cn) !== -1 ? [] : [cn]);
+      return whole.concat(whole.indexOf(cn) === -1 ? [cn] : []);
     }, []).join(' ');
   };
 
   builder.__SYMBOL = __SYMBOL;
+  builder.initialBems = initialBems;
 
   return builder;
 };
