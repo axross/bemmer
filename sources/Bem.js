@@ -1,4 +1,5 @@
 const invariant = require('invariant');
+const { includes, startsWith } = require('./util');
 
 class Bem {
   constructor(params) {
@@ -68,11 +69,12 @@ class Bem {
     if (Array.isArray(parts)) {
       parts
         .reduce((whole, matched) => {
-          return whole.indexOf(matched) === -1 ? whole.concat([matched]) : whole;
+          return includes(whole, matched) ? whole.concat([matched]) : whole;
         }, [])
         .forEach(matched => {
-          if (matched.slice(0, 2) === '__') elements.push(matched.substr(2))
-          if (matched.slice(0, 2) === '--') modifiers.push(matched.substr(2))
+          /* eslint no-magic-numbers: 0 */
+          if (startsWith(matched, '__')) elements.push(matched.substr(2));
+          if (startsWith(matched, '--')) modifiers.push(matched.substr(2));
         });
     }
 

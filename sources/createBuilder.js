@@ -28,7 +28,8 @@ const createBuilder = (...initialClassNames) => {
     );
     invariant(
       Object.keys(modifiersObj).every(key => /^[_a-zA-Z0-9-]*$/.test(key)),
-      'expects keys of modifiersObj are each of a valid string (via. /^[_a-zA-Z0-9-]*$/)'
+      'expects keys of modifiersObj are each of a valid string ' +
+      '(via. /^[_a-zA-Z0-9-]*$/)'
     );
 
     const elements = elementsStr.split('__')
@@ -46,7 +47,7 @@ const createBuilder = (...initialClassNames) => {
       })
       .reduce((whole, cn) => whole.concat(cn.split(' ')), [])
       .reduce((whole, cn) => {
-        return whole.concat(whole.indexOf(cn) !== -1 ? [] : [cn]);
+        return whole.concat(whole.indexOf(cn) === -1 ? [cn] : []);
       }, [])
       .join(' ');
   };
