@@ -8,5 +8,5 @@ module.exports = {
   isBuilder,
 
   // alias
-  builder: createBuilder,
+  create: createBuilder,
 };

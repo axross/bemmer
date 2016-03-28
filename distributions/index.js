@@ -10,5 +10,5 @@ module.exports = {
   isBuilder: isBuilder,
 
   // alias
-  builder: createBuilder
+  create: createBuilder
 };
