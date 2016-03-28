@@ -16,10 +16,12 @@ var createBuilder = function createBuilder() {
   }
 
   invariant(initialClassNames.every(function (cn) {
-    return typeof cn === 'string';
+    return typeof cn === 'string' || cn === undefined;
   }), 'expects each of arguments is a string');
 
   var initialBems = initialClassNames.filter(function (cn) {
+    return typeof cn === 'string';
+  }).filter(function (cn) {
     return cn.length >= 1;
   }).reduce(function (whole, cn) {
     return whole.concat(cn.split(' '));

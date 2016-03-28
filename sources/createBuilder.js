@@ -4,11 +4,12 @@ const { __SYMBOL } = require('./isBuilder');
 
 const createBuilder = (...initialClassNames) => {
   invariant(
-    initialClassNames.every(cn => typeof cn === 'string'),
+    initialClassNames.every(cn => typeof cn === 'string' || cn === undefined),
     'expects each of arguments is a string'
   );
 
   const initialBems = initialClassNames
+    .filter(cn => typeof cn === 'string')
     .filter(cn => cn.length >= 1)
     .reduce((whole, cn) => whole.concat(cn.split(' ')), [])
     .map(cn => Bem.fromFullClassName(cn));

@@ -158,6 +158,20 @@ const TESTCASES = [
       'aaa__zzz__111__xxx__222 aaa__zzz__111__xxx__222--333 aaa__zzz__111__xxx__222--vvv bbb__zzz__111__xxx__222 bbb__zzz__111__xxx__222--333 bbb__zzz__111__xxx__222--vvv ccc__zzz__111__xxx__222 ccc__zzz__111__xxx__222--ddd ccc__zzz__111__xxx__222--333 ccc__zzz__111__xxx__222--vvv',
     ],
   },
+  {
+    classnames: ['aaa bbb__ccc', undefined],
+    expects: [
+      'aaa bbb__ccc',
+      'aaa__zzz bbb__ccc__zzz',
+      'aaa__zzz__yyy__xxx bbb__ccc__zzz__yyy__xxx',
+      'aaa aaa--zzz bbb__ccc bbb__ccc--zzz',
+      'aaa__zzz aaa__zzz--yyy bbb__ccc__zzz bbb__ccc__zzz--yyy',
+      'aaa__zzz__yyy aaa__zzz__yyy--xxx bbb__ccc__zzz__yyy bbb__ccc__zzz__yyy--xxx',
+      'aaa__zzz__yyy__xxx aaa__zzz__yyy__xxx--vvv aaa__zzz__yyy__xxx--uuu bbb__ccc__zzz__yyy__xxx bbb__ccc__zzz__yyy__xxx--vvv bbb__ccc__zzz__yyy__xxx--uuu',
+      'aaa__zzz__yyy__xxx aaa__zzz__yyy__xxx--uuu bbb__ccc__zzz__yyy__xxx bbb__ccc__zzz__yyy__xxx--uuu',
+      'aaa__zzz__111__xxx__222 aaa__zzz__111__xxx__222--333 aaa__zzz__111__xxx__222--vvv bbb__ccc__zzz__111__xxx__222 bbb__ccc__zzz__111__xxx__222--333 bbb__ccc__zzz__111__xxx__222--vvv',
+    ],
+  },
 ];
 
 TESTCASES.forEach((testcase, i) => {
