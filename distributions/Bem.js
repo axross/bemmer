@@ -63,9 +63,7 @@ var Bem = function () {
       var parts = fullClassName.substr(block.length).match(/(__[A-Za-z0-9]+)|(\-\-[A-Za-z0-9]+)/g);
 
       if (Array.isArray(parts)) {
-        parts.reduce(function (whole, matched) {
-          return includes(whole, matched) ? whole : whole.concat([matched]);
-        }, []).forEach(function (matched) {
+        parts.forEach(function (matched) {
           /* eslint no-magic-numbers: 0 */
           if (startsWith(matched, '__')) elements.push(matched.substr(2));
           if (startsWith(matched, '--')) modifiers.push(matched.substr(2));
