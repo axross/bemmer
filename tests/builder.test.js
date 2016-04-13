@@ -172,13 +172,27 @@ const TESTCASES = [
       'aaa__zzz__111__xxx__222 aaa__zzz__111__xxx__222--333 aaa__zzz__111__xxx__222--vvv bbb__ccc__zzz__111__xxx__222 bbb__ccc__zzz__111__xxx__222--333 bbb__ccc__zzz__111__xxx__222--vvv',
     ],
   },
+  {
+    classnames: ['aaa bbb__zzz', undefined],
+    expects: [
+      'aaa bbb__zzz',
+      'aaa__zzz bbb__zzz__zzz',
+      'aaa__zzz__yyy__xxx bbb__zzz__zzz__yyy__xxx',
+      'aaa aaa--zzz bbb__zzz bbb__zzz--zzz',
+      'aaa__zzz aaa__zzz--yyy bbb__zzz__zzz bbb__zzz__zzz--yyy',
+      'aaa__zzz__yyy aaa__zzz__yyy--xxx bbb__zzz__zzz__yyy bbb__zzz__zzz__yyy--xxx',
+      'aaa__zzz__yyy__xxx aaa__zzz__yyy__xxx--vvv aaa__zzz__yyy__xxx--uuu bbb__zzz__zzz__yyy__xxx bbb__zzz__zzz__yyy__xxx--vvv bbb__zzz__zzz__yyy__xxx--uuu',
+      'aaa__zzz__yyy__xxx aaa__zzz__yyy__xxx--uuu bbb__zzz__zzz__yyy__xxx bbb__zzz__zzz__yyy__xxx--uuu',
+      'aaa__zzz__111__xxx__222 aaa__zzz__111__xxx__222--333 aaa__zzz__111__xxx__222--vvv bbb__zzz__zzz__111__xxx__222 bbb__zzz__zzz__111__xxx__222--333 bbb__zzz__zzz__111__xxx__222--vvv',
+    ],
+  },
 ];
 
 TESTCASES.forEach((testcase, i) => {
   const builder = createBuilder(...testcase.classnames);
 
   ARGS.forEach((args, j) => {
-    const result = builder(...args);
+    const result = createBuilder(builder(...args))();
 
     test(`builder() returns correct classname string #${i + 1}-${j + 1}`, t => {
       t.is(result, testcase.expects[j]);
