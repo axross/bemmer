@@ -68,9 +68,6 @@ class Bem {
 
     if (Array.isArray(parts)) {
       parts
-        .reduce((whole, matched) => {
-          return includes(whole, matched) ? whole : whole.concat([matched]);
-        }, [])
         .forEach(matched => {
           /* eslint no-magic-numbers: 0 */
           if (startsWith(matched, '__')) elements.push(matched.substr(2));
