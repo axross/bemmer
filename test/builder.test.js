@@ -1,7 +1,5 @@
-require('babel-register');
-
 const test = require('ava');
-const { createBuilder } = require('../sources');
+const bemmer = require('../distribution').default;
 
 const ARGS = [
   /* eslint quote-props: 0 */
@@ -189,10 +187,10 @@ const TESTCASES = [
 ];
 
 TESTCASES.forEach((testcase, i) => {
-  const builder = createBuilder(...testcase.classnames);
+  const builder = bemmer.createBuilder(...testcase.classnames);
 
   ARGS.forEach((args, j) => {
-    const result = createBuilder(builder(...args))();
+    const result = bemmer.createBuilder(builder(...args))();
 
     test(`builder() returns correct classname string #${i + 1}-${j + 1}`, t => {
       t.is(result, testcase.expects[j]);
