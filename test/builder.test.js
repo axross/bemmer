@@ -2,7 +2,6 @@ const test = require('ava');
 const bemmer = require('../distribution').default;
 
 const ARGS = [
-  /* eslint quote-props: 0 */
   [''],
   ['zzz'],
   ['zzz__yyy__xxx'],
@@ -15,7 +14,6 @@ const ARGS = [
 ];
 
 const TESTCASES = [
-  /* eslint max-len: 0 */
   {
     classnames: ['aaa'],
     expects: [
@@ -190,9 +188,9 @@ TESTCASES.forEach((testcase, i) => {
   const builder = bemmer.createBuilder(...testcase.classnames);
 
   ARGS.forEach((args, j) => {
-    const result = bemmer.createBuilder(builder(...args))();
-
     test(`builder() returns correct classname string #${i + 1}-${j + 1}`, t => {
+      const result = bemmer.createBuilder(builder(...args))();
+
       t.is(result, testcase.expects[j]);
     });
   });
