@@ -45,7 +45,11 @@ const createBuilder = (...initialClassNames: (string | undefined)[]): Builder =>
         modifiers: bem.modifiers.concat(modifiers),
       })).toString())
       .reduce((whole, className) => whole.concat(className.split(' ')), [] as string[])
-      .reduce((whole, className) => whole.indexOf(className) === -1 ? whole.concat([className]) : whole, [] as string[])
+      .reduce((whole, className) => {
+        if (whole.indexOf(className) !== -1) return whole;
+
+        return whole.concat([className])
+      }, [] as string[])
       .join(' ');
   };
 
